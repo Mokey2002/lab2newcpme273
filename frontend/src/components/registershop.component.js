@@ -34,12 +34,18 @@ class ShopRegister extends Component {
       successful: false,
     });
     AuthService.registerShop(this.state.username.user.username, this.state.shopname) 
-        .then(() => {
+        .then((data) => {
+          console.log("data")
+          console.log(data)
+          console.log("data")
           this.setState({
             successful: true,
           });
         })
-        .catch(() => {
+        .catch((error) => {
+          console.log("error")
+          console.log(error)
+          console.log("error")
           this.setState({
             successful: false,
           });

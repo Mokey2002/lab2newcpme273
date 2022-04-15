@@ -24,7 +24,7 @@ class AuthService {
       username,
       shopname
     },{ headers: authHeader()}).then((response) => {
-      if (response.data.result == 200) {
+      if (response.data.status == 201) {
         localStorage.setItem("shopname", JSON.stringify(response.data.shopname));
       }
 

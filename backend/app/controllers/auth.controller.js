@@ -101,7 +101,7 @@ exports.signupShop = (req, res) => {
         });
         return res.status(200).send({ message: "Shop Created." });
       }
-      res.status(201).send({message :"Shopname already taken"});
+      res.status(500).send({message :"Shopname already taken"});
     });
 };
 exports.signin = (req, res) => {
