@@ -48,6 +48,7 @@ class ShopRegister extends Component {
           console.log("error")
           this.setState({
             successful: false,
+            validid: true
           });
         });
     
@@ -59,19 +60,23 @@ class ShopRegister extends Component {
     let {successful} = this.state;
     let {validid} = this.state;
     let success = null;
-    let loginredirect = null;
+ 
     let invalidID;
 
-    if(successful){
+    if(successful == true){
+      console.log("indside suecc")
       success = <Redirect to = "/shop"/>
   }
-    if(validid){
+    if(validid ==true){
       invalidID =    <div class="alert alert-danger" role="alert">
       <td>"Shop name already taken"</td> 
   </div>
   }
     return (
+      
       <div className="col-md-12">
+        {invalidID}
+        {success}
         <div className="card card-container">
           <img
             src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
