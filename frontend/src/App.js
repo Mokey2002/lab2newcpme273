@@ -14,6 +14,7 @@ import BoardModerator from "./components/board-moderator.component";
 import BoardAdmin from "./components/board-admin.component";
 import ShopRegister from "./components/registershop.component";
 import Shop from "./components/shop.component";
+import Favorites from "./components/favorites.component";
 import { logout } from "./actions/auth";
 import { clearMessage } from "./actions/message";
 
@@ -121,6 +122,11 @@ class App extends Component {
                     Seller Registration
                   </Link>
                 </li>
+                <li  className="nav-item">
+                <Link to={"/Favorites"} className="nav-link">
+                   Favorites
+                  </Link>
+                </li>
                 <li className="nav-item">
                   <a href="/login" className="nav-link" onClick={this.logOut}>
                     LogOut
@@ -156,6 +162,7 @@ class App extends Component {
               <Route path="/admin" component={BoardAdmin} />
               <Route path="/RegisterShop" component={ShopRegister} />
               <Route path="/shop" component={Shop} />
+              <Route path="/Favorites" component={Favorites} />
             </Switch>
           </div>
 
