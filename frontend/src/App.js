@@ -15,6 +15,8 @@ import BoardAdmin from "./components/board-admin.component";
 import ShopRegister from "./components/registershop.component";
 import Shop from "./components/shop.component";
 import Favorites from "./components/favorites.component";
+import Update from "./components/update.component";
+import Cart from "./components/cart.component";
 import { logout } from "./actions/auth";
 import { clearMessage } from "./actions/message";
 
@@ -163,6 +165,8 @@ class App extends Component {
               <Route path="/RegisterShop" component={ShopRegister} />
               <Route path="/shop" component={Shop} />
               <Route path="/Favorites" component={Favorites} />
+              <Route path="/update" component={Update} />
+              <Route path="/cart" component={Cart} />
             </Switch>
           </div>
 
