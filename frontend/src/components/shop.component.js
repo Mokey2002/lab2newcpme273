@@ -1,8 +1,11 @@
 import React, { Component } from "react";
-
+import {Redirect} from 'react-router';
 import UserService from "../services/user.service";
-
-export default class Shop extends Component {
+import axios from 'axios';
+import { connect } from "react-redux";
+import cookie from 'react-cookies';
+import AuthService from "../services/auth.service";
+class Shop extends Component {
   constructor(props) {
     super(props);
 
@@ -15,7 +18,9 @@ export default class Shop extends Component {
       description : "",
       price: "",
       quantity : "",
-      photo : ""
+      photo : "",
+      username: this.props,
+      shopname:""
       
   };
 
@@ -71,13 +76,139 @@ export default class Shop extends Component {
       })
 
   }
+
+
+  submitLogin = (e) => {
+
+    e.preventDefault();
+    const data = {
+        username: this.state.username.user.username,
+        itemname : this.state.itemname,
+        category:this.state.category,
+        description : this.state.description,
+        price: this.state.price,
+        quantity : this.state.quantity,
+        photo : this.state.photo
+    }
+
+    const file= this.state.photo;
+   // const data = cookie.load('cookie')// {  username:"adfafsd"}// cookie.load('cookie')}
+
+    const formData = new FormData()
+    formData.append('image',file)
+    formData.append('username', this.state.username.user.username)
+    formData.append('itemname', this.state.itemname)
+    formData.append('category', this.state.category)
+    formData.append('description', this.state.description)
+    formData.append('price', this.state.price)
+    formData.append('quantity', this.state.quantity)
+    console.log("File");
+    console.log(data);
+    console.log("File");
+    /*axios.post('http://localhost:3001/api/image', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+    })*/
+    //send data to backend
+    axios.post('http://localhost:3001/additem',formData,{
+        headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+    })
+        .then(response => {
+            console.log("Status Code Register : ",response.status);
+            if(response.status === 200){
+                this.setState({
+                    added : true
+                })
+            }else if(response.status === 201){
+                this.setState({
+                    successflag : false,
+                    duplicateid: true
+                })
+            }
+        }); 
+}
+
+
+
+
+
+
+
+
   componentDidMount() {
+
+
+    const data={
+      username:  this.state.username.user.username,
+      shopname:  cookie.load('shopname')
+  }
+
+  console.log("shop");
+ 
+  console.log(cookie.load('shopname'));
+  console.log("shop");
+  //if(cookie.load('shopname')!==null){
+  //document.cookie = 'shopname' +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+  //}
+
+  AuthService.ShopData(this.state.username.user.username,cookie.load('shopname')) 
+  .then((data) => {
+    console.log("data shop component")
+    console.log(data)
+    console.log("data shop component")
+    if(data.status === 200){
+      console.log("&&&&&&&&&&")
+      console.log(data)
+      console.log("&&&&&&&&&&")
+      this.setState({
+          owner: true,
+          items : this.state.items.concat(data),
+          photo: 'http://localhost:3001/uploads/'+this.state.photo.concat(data.informacion[0].photo)
+      })
+  } else if(data.status === 201){
+      console.log("&&&&&&&&&&")
+      console.log(data)
+    //  console.log(response.data.shift())
+      console.log("&&&&&&&&&&")
+     // document.cookie = 'shopname' +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+      this.setState({
+          owner:false,
+          photo : 'http://localhost:3001/uploads/'+this.state.photo.concat(data.informacion[0].photo),
+          items : this.state.items.concat(data) 
+      })
+  }
+  })
+  .catch((error) => {
+    console.log("error")
+    console.log(error)
+    console.log("error")
+    this.setState({
+      successful: false,
+      validid: true
+    });
+  });
+
+
 
 
   }
 
   render() {
-         if(!cookie.load('cookie')){
+            //if not logged in go to login page
+            let redirectVar = null;
+            let shopowner= null;
+            let sales = null;
+            let {owner} = this.state;
+            let {added} = this.state;
+            let additem = null;
+            let modalval = null;
+            let addsuccess= null;
+            let editowner = null;
+            let {photo} = this.state;
+         if(1==3){ //!cookie.load('cookie')
             redirectVar = <Redirect to= "/login"/>
         }
         if (added){
@@ -103,7 +234,7 @@ export default class Shop extends Component {
        </button>
        
    
-        modalval =        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        modalval =        <div class="modal fade" id="exampleModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
@@ -163,7 +294,7 @@ export default class Shop extends Component {
     let details = this.state.items.map(item => {
         return(
             <tr>
-                <td> <figure> {'http://localhost:3001/uploads/'+item.photo && <img src={'http://localhost:3001/uploads/'+item.photo} name={item.itemname} alt="img"/>} <figcaption>{item.itemname} </figcaption></figure></td>
+                <td> <figure> {'http://localhost:8080/uploads/'+item.photo && <img src={'http://localhost:8080/uploads/'+item.photo} name={item.itemname} alt="img"/>} <figcaption>{item.itemname} </figcaption></figure></td>
                 <td>{item.category}</td>
                 <td>{item.description}</td>
                 <td>{item.price}</td>
@@ -241,3 +372,11 @@ export default class Shop extends Component {
   );
   }
 }
+function mapStateToProps(state) {
+  const { user } = state.auth;
+  console.log(user)
+  return {
+    user,
+  };
+}
+export default connect(mapStateToProps)(Shop);

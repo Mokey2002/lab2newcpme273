@@ -32,6 +32,23 @@ class AuthService {
     });
   }
 
+  ShopData(username,shopname) {
+    return axios.post(API_URL + "shopData",{
+      username,
+      shopname
+    },{ headers: authHeader()}).then((response) => {
+      if (response.data.status == 201) {
+                         //localStorage.setItem("shopname", JSON.stringify(response.data.shopname));
+        return response.data;
+      }
+      else if(response.data.status == 200){
+        return response.data;
+      }
+
+      return response.data;
+    });
+  }
+
   register(username, email, password,age,zip,city,street) {
     return axios.post(API_URL + "signup", {
       username,

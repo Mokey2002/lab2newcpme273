@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { register } from "../actions/auth";
 import { Redirect } from 'react-router-dom';
 import AuthService from "../services/auth.service";
-
+import cookie from 'react-cookies';
 class ShopRegister extends Component {
   
   constructor(props) {
@@ -33,10 +33,14 @@ class ShopRegister extends Component {
     this.setState({
       successful: false,
     });
+
+  
     AuthService.registerShop(this.state.username.user.username, this.state.shopname) 
         .then((data) => {
           console.log("data")
           console.log(data)
+          document.cookie = "shopname" +'='+this.state.shopname +'; Path=/;';
+
           console.log("data")
           this.setState({
             successful: true,

@@ -104,6 +104,48 @@ exports.signupShop = (req, res) => {
       res.status(500).send({message :"Shopname already taken"});
     });
 };
+
+exports.shopData = (req, res) => {
+  console.log("Inside shopdata")
+  console.log(req.body.shopname)
+  console.log(req.body.username)
+  console.log("Inside shopdata")
+  Shop.findOne({
+    shopname: req.body.shopname,
+    username: req.body.username
+  })
+    .populate("roles", "-__v")
+    .exec((err, user) => {
+      console.log("first result  data")
+      console.log(user);
+      console.log("first result   data")
+      if (err) {
+        res.status(500).send({ message: err });
+        return;
+      }
+
+      if (!user) {
+        Shop.find({shopname:req.body.shopname}).exec(function(err, result) {
+          console.log("username + shopname not found--returning all shopitmes owner-false ")
+          if (err) throw err;
+          console.log(result);
+          console.log("username + shopname not found--returning all shopitmes owner-false ")
+          return res.status(201).send({ status: 201, informacion:result });
+        });
+      }else{
+
+        Shop.find({shopname:req.body.shopname}).exec(function(err, result) {
+          console.log("username + shopname  found--returning all shopitmes owner-true ")
+          if (err) throw err;
+          console.log(result);
+          console.log("username + shopname  found--returning all shopitmes owner-true ")
+          return res.status(200).send({ status: 200,informacion:result });
+        });
+        
+      }
+    
+    });
+};
 exports.signin = (req, res) => {
   User.findOne({
     username: req.body.username

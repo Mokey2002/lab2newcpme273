@@ -27,5 +27,13 @@ module.exports = function(app) {
     controller.signupShop
   );
 
+  app.post(
+    "/api/auth/shopData",
+    [
+      authJwt.verifyToken
+    ],
+    controller.shopData
+  );
+
   app.post("/api/auth/signin", controller.signin);
 };
