@@ -1,9 +1,24 @@
 const config = require("../config/auth.config");
 const db = require("../models");
+const multer = require("multer");
+const storage = multer.diskStorage({
+  destination:(req,file,cb) =>{
+      cb(null,"./");
+  },
+  filename: function(req,file,cb){
+      const ext = file.mimetype.split("/")[1];
+      cb(null, 'uploads/'+file.originalname);
 
+  }
+});
+// uploads
+const upload = multer({
+  storage:storage
+})
 const User = db.user;
 const Role = db.role;
 const Shop = db.shop;
+const ShopItem = db.ShopItems;
 
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
@@ -146,6 +161,42 @@ exports.shopData = (req, res) => {
     
     });
 };
+
+exports.addItem =  upload.single("image"), (req, res) => {
+  console.log("Add Item")
+  console.log(req.body)
+  console.log("Additem")
+  let username = req.body.username;
+  let name = req.body.itemname;
+  let category = req.body.category;
+  let description = req.body.description;
+  let price = req.body.price;
+  let quantity = req.body.quantity;
+  let sname=req.body.shopname
+
+  console.log("Adding shop")
+  const shopitem = new ShopItem({
+    username: username,
+    shopname: sname,
+    itemname: name,
+    category: category,
+    description : description,
+    price  : price,
+    quantity: quantity,
+    photolocation: String
+
+  });
+  shop.save((err, shop) => {
+    if (err) {
+      res.status(500).send({ message: err });
+      return;
+    } 
+  });
+  return res.status(200).send({ message: "Shop Created." });
+
+};
+
+
 exports.signin = (req, res) => {
   User.findOne({
     username: req.body.username

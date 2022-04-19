@@ -4,6 +4,7 @@ import { register } from "../actions/auth";
 import { Redirect } from 'react-router-dom';
 import AuthService from "../services/auth.service";
 import cookie from 'react-cookies';
+import 'bootstrap/dist/css/bootstrap.min.css';
 class ShopRegister extends Component {
   
   constructor(props) {

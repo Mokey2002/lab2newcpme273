@@ -5,6 +5,7 @@ import axios from 'axios';
 import { connect } from "react-redux";
 import cookie from 'react-cookies';
 import AuthService from "../services/auth.service";
+import bootstrap from 'bootstrap'
 class Shop extends Component {
   constructor(props) {
     super(props);
@@ -111,24 +112,34 @@ class Shop extends Component {
         }
     })*/
     //send data to backend
-    axios.post('http://localhost:3001/additem',formData,{
-        headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-    })
-        .then(response => {
-            console.log("Status Code Register : ",response.status);
-            if(response.status === 200){
-                this.setState({
-                    added : true
-                })
-            }else if(response.status === 201){
-                this.setState({
-                    successflag : false,
-                    duplicateid: true
-                })
-            }
-        }); 
+ 
+
+
+        AuthService.AddItem(this.state.username.user.username, this.state.shopname) 
+        .then((data) => {
+          console.log("data")
+          console.log(data)
+        //  document.cookie = "shopname" +'='+this.state.shopname +'; Path=/;';
+
+          console.log("data")
+          this.setState({
+            added : true
+          });
+        })
+        .catch((error) => {
+          console.log("error")
+          console.log(error)
+          console.log("error")
+          this.setState({
+            successflag : false,
+            duplicateid: true
+          });
+        });
+
+
+
+
+
 }
 
 
@@ -218,75 +229,77 @@ class Shop extends Component {
 
         }
         if(owner){
-            editowner = <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-            Edit item
-          </button>
-            shopowner =   <div><label class="form-label" for="customFile">Change Profile picture</label>
+          editowner = <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+          Edit item
+        </button>
+          shopowner =   <div><label class="form-label" for="customFile">Change Profile picture</label>
 
-            <input type="file" name="image" accept="image/*" multiple={false} onChange={this.imageHandler2} />
+          <input type="file" name="image" accept="image/*" multiple={false} onChange={this.imageHandler2} />
+        </div>
+          sales = <div class="form-group ">
+          <label for="sales" class="sr-only">sales</label>
+          <p name="sales" id="sales"> 1 items </p>
+        </div>
+     additem =  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+       Add item
+     </button>
+     
+ 
+      modalval =        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
           </div>
-            sales = <div class="form-group ">
-            <label for="sales" class="sr-only">sales</label>
-            <p name="sales" id="sales"> 1 items </p>
-          </div>
-       additem =  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-         Add item
-       </button>
-       
-   
-        modalval =        <div class="modal fade" id="exampleModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-            <div style={{width: '100%'}} class="form-group">
-                        <div class="col col-lg-3">
-                        <label> 
-                         Item name:   <input  onChange ={this.itemnamehandler} type="text" class="form-control" name="idnum" placeholder="" />
-                         
-                        </label>
-                        <br/>
-                        <label> 
-                         Category:   <input  onChange ={this.categoryhandler} type="text" class="form-control" name="idnum" placeholder="" />
-                        </label>
-                        <br/>
-                        <label> 
-                         Description:   <input  onChange ={this.descriptionhandler} type="text" class="form-control" name="idnum" placeholder="" />
-                            
-                        </label>
-                        <br/>
-                        <label>
-                           Price:     <input  onChange = {this.pricehandler} type="text" class="form-control" name="booktitle" placeholder="" />
-                        </label>
-                        <br/>
-                        <label>
-                            Quantity:
-                                <input onChange = {this.quantityhandler} type="text" class="form-control" name="bookauthor" placeholder=""/>
-                     </label>
-                     </div>
-                     <div class="col col-lg-2">
-                     <label>
-                            Photo:
+          <div class="modal-body">
+          <div style={{width: '100%'}} class="form-group">
+                      <div class="col col-lg-3">
+                      <label> 
+                       Item name:   <input  onChange ={this.itemnamehandler} type="text" class="form-control" name="idnum" placeholder="" />
+                       
+                      </label>
+                      <br/>
+                      <label> 
+                       Category:   <input  onChange ={this.categoryhandler} type="text" class="form-control" name="idnum" placeholder="" />
+                      </label>
+                      <br/>
+                      <label> 
+                       Description:   <input  onChange ={this.descriptionhandler} type="text" class="form-control" name="idnum" placeholder="" />
+                          
+                      </label>
+                      <br/>
+                      <label>
+                         Price:     <input  onChange = {this.pricehandler} type="text" class="form-control" name="booktitle" placeholder="" />
+                      </label>
+                      <br/>
+                      <label>
+                          Quantity:
+                              <input onChange = {this.quantityhandler} type="text" class="form-control" name="bookauthor" placeholder=""/>
+                   </label>
+                   </div>
+                   <div class="col col-lg-2">
+                   <label>
+                          Photo:
 
-                    <input type="file" name="image" accept="image/*" multiple={false} onChange={this.imageHandler} />
-                     </label>
-                     </div>
-                        </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button  onClick = {this.submitLogin}  type="button" class="btn btn-primary">Add item</button>
-            </div>
-            {addsuccess}
+                  <input type="file" name="image" accept="image/*" multiple={false} onChange={this.imageHandler} />
+                   </label>
+                   </div>
+                      </div>
           </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button  onClick = {this.submitLogin}  type="button" class="btn btn-primary">Add item</button>
+          </div>
+          {addsuccess}
         </div>
       </div>
-    
+    </div>
+  
+  
+  
     
     
     }
@@ -368,6 +381,50 @@ class Shop extends Component {
                       </tbody>
                   </table>
           </div> 
+  
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+  Launch demo modal
+</button>
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       </div> 
   );
   }
