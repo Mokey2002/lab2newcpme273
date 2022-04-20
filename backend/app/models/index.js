@@ -10,7 +10,7 @@ db.role = require("./role.model");
 db.cart = require("./cart.model");
 db.favorites = require("./favorites.model");
 db.shop = require("./shop.model");
-
+db.shopItems = require("./shopitems.model");
 
 db.ROLES = ["user", "admin", "moderator"];
 

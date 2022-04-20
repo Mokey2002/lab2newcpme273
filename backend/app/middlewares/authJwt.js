@@ -6,7 +6,7 @@ const Role = db.role;
 
 verifyToken = (req, res, next) => {
   console.log("insde verify token");
-  console.log(req.body)
+  console.log(req.headers)
   console.log("insde verify token");
   let token = req.headers["x-access-token"];
   console.log("token")

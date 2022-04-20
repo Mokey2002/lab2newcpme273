@@ -50,10 +50,14 @@ class AuthService {
   }
 
   
-  AddItem(formData) {
-    return axios.post(API_URL + "addItem",{
-      formData
-    },{ headers: authHeader(),'Content-Type': 'multipart/form-data'}).then((response) => {
+  AddItem(informacion) {
+    console.log("item information")
+    console.log(informacion)
+ 
+    console.log("item information")
+    return axios.post(API_URL + "addItem",
+    informacion
+    ,{ headers: {'Content-Type':'multipart/form-data'}}).then((response) => {
       if (response.data.status == 201) {
         console.log("201")
                          //localStorage.setItem("shopname", JSON.stringify(response.data.shopname));

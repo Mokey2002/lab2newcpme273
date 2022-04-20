@@ -89,7 +89,8 @@ class Shop extends Component {
         description : this.state.description,
         price: this.state.price,
         quantity : this.state.quantity,
-        photo : this.state.photo
+        photo : this.state.photo,
+        shopname:  cookie.load('shopname')
     }
 
     const file= this.state.photo;
@@ -105,6 +106,7 @@ class Shop extends Component {
     formData.append('quantity', this.state.quantity)
     console.log("File");
     console.log(data);
+    console.log(formData);
     console.log("File");
     /*axios.post('http://localhost:3001/api/image', formData, {
         headers: {
@@ -115,10 +117,10 @@ class Shop extends Component {
  
 
 
-        AuthService.AddItem(this.state.username.user.username, this.state.shopname) 
-        .then((data) => {
+        AuthService.AddItem(formData) 
+        .then((dataresult) => {
           console.log("data")
-          console.log(data)
+          console.log(dataresult)
         //  document.cookie = "shopname" +'='+this.state.shopname +'; Path=/;';
 
           console.log("data")

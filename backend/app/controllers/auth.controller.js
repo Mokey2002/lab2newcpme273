@@ -3,11 +3,12 @@ const db = require("../models");
 const multer = require("multer");
 const storage = multer.diskStorage({
   destination:(req,file,cb) =>{
-      cb(null,"./");
+      cb(null,".");
   },
   filename: function(req,file,cb){
+    console.log(file)
       const ext = file.mimetype.split("/")[1];
-      cb(null, 'uploads/'+file.originalname);
+      cb(null, file.originalname);
 
   }
 });
@@ -18,7 +19,8 @@ const upload = multer({
 const User = db.user;
 const Role = db.role;
 const Shop = db.shop;
-const ShopItem = db.ShopItems;
+const ShopItem = db.shopItems;
+
 
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
@@ -162,9 +164,11 @@ exports.shopData = (req, res) => {
     });
 };
 
-exports.addItem =  upload.single("image"), (req, res) => {
+exports.addItem =(req, res) => {
   console.log("Add Item")
+  upload.single("image")
   console.log(req.body)
+  console.log(req.headers)
   console.log("Additem")
   let username = req.body.username;
   let name = req.body.itemname;
@@ -183,16 +187,16 @@ exports.addItem =  upload.single("image"), (req, res) => {
     description : description,
     price  : price,
     quantity: quantity,
-    photolocation: String
+    photolocation:req.file.originalname
 
   });
-  shop.save((err, shop) => {
+  shopitem.save((err, shop) => {
     if (err) {
       res.status(500).send({ message: err });
       return;
     } 
   });
-  return res.status(200).send({ message: "Shop Created." });
+  return res.status(200).send({ message: "Shop Item Added." });
 
 };
 

@@ -1,12 +1,33 @@
 const { verifySignUp } = require("../middlewares");
 const controller = require("../controllers/auth.controller");
 const { authJwt } = require("../middlewares");
+const multer = require("multer");
+const storage = multer.diskStorage({
+  destination:(req,file,cb) =>{
+      cb(null,"./");
+  },
+  filename: function(req,file,cb){
+      const ext = file.mimetype.split("/")[1];
+      cb(null, './uploads/'+file.originalname);
+
+  }
+});
+// uploads
+const upload = multer({
+  storage:storage
+})
+
 module.exports = function(app) {
   app.use(function(req, res, next) {
-    res.header(
+   /* res.header(
       "Access-Control-Allow-Headers",
       "x-access-token, Origin, Content-Type, Accept"
-    );
+    );*/
+ 
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT,DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers');
+    res.setHeader('Cache-Control', 'no-cache');
     next();
   });
 
@@ -37,10 +58,8 @@ module.exports = function(app) {
 
   
   app.post(
-    "/api/auth/shopData",
-    [
-      authJwt.verifyToken
-    ],
+    "/api/auth/addItem",
+    upload.single('image'),
     controller.addItem
   );
 
