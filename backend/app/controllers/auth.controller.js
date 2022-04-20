@@ -20,7 +20,7 @@ const User = db.user;
 const Role = db.role;
 const Shop = db.shop;
 const ShopItem = db.shopItems;
-
+const Cart = db.cart;
 
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
@@ -221,6 +221,26 @@ exports.getAllShop = (req, res) => {
     
     });
 };
+
+exports.getItem = (req, res) => {
+  console.log("Inside getItem")
+  console.log(req.body);
+  ShopItem.find({
+    itemname: req.body.itemname.itemname
+  }).exec((err, user) => {
+      console.log("getItem  data")
+      console.log(user);
+      console.log("getItem   data")
+      if (err) {
+        res.status(500).send({ message: err });
+        return;
+      }
+      return res.status(200).send({ status: 200,informacion:user });
+
+   
+    
+    });
+};
 exports.addItem =(req, res) => {
   console.log("Add Item")
   upload.single("image")
@@ -256,7 +276,37 @@ exports.addItem =(req, res) => {
   return res.status(200).send({ message: "Shop Item Added." });
 
 };
+exports.addCart =(req, res) => {
+  console.log("Add cart")
 
+  console.log(req.body)
+  console.log("add cart")
+  let username = req.body.itemname.username;
+  let name = req.body.itemname.itemname;
+  let price = req.body.itemname.price;
+  //let quantity = req.body.quantity;
+
+
+  console.log("Adding Cart")
+  const cartItem = new Cart({
+    username:username,
+    itemname: name,
+    price: price
+
+  });
+  cartItem.save((err, shop) => {
+    if (err) {
+      res.status(500).send({ message: err });
+      return;
+    }
+    else{
+
+      return res.status(200).send({ message: "Cart Item Added." });
+    }
+  });
+  return  res.status(500).send({ message: "Error" });
+
+};
 
 exports.signin = (req, res) => {
   User.findOne({

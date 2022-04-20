@@ -8,8 +8,11 @@ import {Redirect} from 'react-router';
 class Overview extends Component {
     constructor(props){
         super(props);
+        this.handleClickFavorites = this.handleClickFavorites.bind(this);
+        this.handleAddCart = this.handleAddCart.bind(this);
         this.state = {  
-            items : []
+            items : [],
+            username:this.props
         }
     }  
 
@@ -19,10 +22,11 @@ class Overview extends Component {
         console.log(e.target.value);
 
         const data={
-            username: cookie.load('cookie'),
+            username: this.state.username.user.username,
             itemname:e.target.value
         }
-        axios.post('http://localhost:3001/addfavorites',data)
+        AuthService.addFavorites(data) 
+        //axios.post('http://localhost:3001/addfavorites',data)
                 .then((response) => {
 
 
@@ -38,6 +42,8 @@ class Overview extends Component {
                // });
             });
     }
+
+
     handleshopclick (e){
         //e.stopPropagation();
         // access to e.target here
@@ -56,19 +62,20 @@ class Overview extends Component {
         //e.stopPropagation();
         // access to e.target here
         console.log(e.target.value);
-
         const data={
-            username: cookie.load('cookie'),
+            username: this.state.username.user.username,
             itemname:e.target.value
         }
-        axios.post('http://localhost:3001/addcart',data)
+    
+        AuthService.addCart(data) 
+       // axios.post('http://localhost:3001/addcart',data)
                 .then((response) => {
 
 
                     if(response.status === 200){
-                        console.log("passed favorites")
+                        console.log("added to cart ")
                     } else if(response.status === 201){
-                        console.log("INVALID DATA  favorites")
+                        console.log("not added to cart")
                     }
 
                 //update the state with the response data
@@ -83,22 +90,26 @@ class Overview extends Component {
     //get the books data from backend  
     componentDidMount(){
         const data={
-            username: cookie.load('cookie'),
+            username: this.state.username.user.username,
             itemname: cookie.load('itemname')
         }
 
         console.log("Overview");
        
-        console.log(cookie.load('cookie'));
+        console.log(this.state.username.user.username);
         console.log(cookie.load('itemname'));
         console.log("Overview");
-        axios.post('http://localhost:3001/getitem',data)
+        AuthService.getItem(data) 
+        //axios.post('http://localhost:3001/getitem',data)
                 .then((response) => {
 
 
-                    if(response.status === 201){
+                    if(response.status === 200){
+                        console.log("Overview response");
+                        console.log(response)
+                        console.log("Overview response");
                         this.setState({
-                    items : this.state.items.concat(response.data) 
+                    items : this.state.items.concat(response.informacion) 
                 });
                         console.log("passed favorites")
                     }
@@ -137,8 +148,10 @@ class Overview extends Component {
         })
         //if not logged in go to login page
         let redirectVar = null;
-        if(!cookie.load('cookie')){
-            redirectVar = <Redirect to= "/login"/>
+        const { user: currentUser } = this.props;
+
+        if (!currentUser) {
+          return <Redirect to="/login" />;
         }
         return(
             <div>
