@@ -90,7 +90,7 @@ exports.signup = (req, res) => {
   });
 };
 exports.signupShop = (req, res) => {
-  Shop.findOne({
+  ShopItem.findOne({
     shopname: req.body.shopname
   })
     .populate("roles", "-__v")
@@ -105,7 +105,7 @@ exports.signupShop = (req, res) => {
 
       if (!user) {
         console.log("Adding shop")
-        const shop = new Shop({
+        const shop = new ShopItem({
           username: req.body.username,
           shopname: req.body.shopname
       
@@ -163,7 +163,64 @@ exports.shopData = (req, res) => {
     
     });
 };
+exports.getShopItems = (req, res) => {
+  console.log("Inside shopdata")
+  console.log(req.body.shopname)
+  console.log(req.body.username)
+  console.log("Inside shopdata")
+  ShopItem.find({
+    shopname: req.body.shopname,
+    username: req.body.username
+  }).exec((err, user) => {
+      console.log("first result  data")
+      console.log(user);
+      console.log("first result   data")
+      if (err) {
+        res.status(500).send({ message: err });
+        return;
+      }
 
+      if (!user) {
+        ShopItem.find({shopname:req.body.shopname}).exec(function(err, result) {
+          console.log("username + shopname not found--returning all shopitmes owner-false ")
+          if (err) throw err;
+          console.log(result);
+          console.log("username + shopname not found--returning all shopitmes owner-false ")
+          return res.status(201).send({ status: 201, informacion:result });
+        });
+      }else{
+
+        ShopItem.find({shopname:req.body.shopname}).exec(function(err, result) {
+          console.log("username + shopname  found--returning all shopitmes owner-true ")
+          if (err) throw err;
+          console.log(result);
+          console.log("username + shopname  found--returning all shopitmes owner-true ")
+          return res.status(200).send({ status: 200,informacion:result });
+        });
+        
+      }
+    
+    });
+};
+exports.getAllShop = (req, res) => {
+  console.log("Inside getAllshop")
+
+  ShopItem.find({
+    itemname: {$ne : null}
+  }).exec((err, user) => {
+      console.log("first result  data")
+      console.log(user);
+      console.log("first result   data")
+      if (err) {
+        res.status(500).send({ message: err });
+        return;
+      }
+      return res.status(200).send({ status: 200,informacion:user });
+
+   
+    
+    });
+};
 exports.addItem =(req, res) => {
   console.log("Add Item")
   upload.single("image")

@@ -63,5 +63,19 @@ module.exports = function(app) {
     controller.addItem
   );
 
+  app.post(
+    "/api/auth/getShopItems",
+    [
+      authJwt.verifyToken
+    ],
+    controller.getShopItems
+  );
+
+  app.post(
+    "/api/auth/getAllShop",
+    controller.getAllShop
+  );
+
+
   app.post("/api/auth/signin", controller.signin);
 };

@@ -104,6 +104,7 @@ class Shop extends Component {
     formData.append('description', this.state.description)
     formData.append('price', this.state.price)
     formData.append('quantity', this.state.quantity)
+    formData.append('shopname', data.shopname)
     console.log("File");
     console.log(data);
     console.log(formData);
@@ -167,30 +168,30 @@ class Shop extends Component {
   //document.cookie = 'shopname' +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
   //}
 
-  AuthService.ShopData(this.state.username.user.username,cookie.load('shopname')) 
+  AuthService.shopItems(this.state.username.user.username,cookie.load('shopname')) 
   .then((data) => {
     console.log("data shop component")
     console.log(data)
     console.log("data shop component")
     if(data.status === 200){
-      console.log("&&&&&&&&&&")
+      console.log("1111111111111")
       console.log(data)
-      console.log("&&&&&&&&&&")
+      console.log("1111111111111")
       this.setState({
           owner: true,
-          items : this.state.items.concat(data),
-          photo: 'http://localhost:3001/uploads/'+this.state.photo.concat(data.informacion[0].photo)
+          items : this.state.items.concat(data.informacion),
+          photo: 'http://localhost:8001/uploads/'+this.state.photo.concat(data.informacion[0].photo)
       })
   } else if(data.status === 201){
-      console.log("&&&&&&&&&&")
+      console.log("22222222222")
       console.log(data)
     //  console.log(response.data.shift())
-      console.log("&&&&&&&&&&")
+      console.log("2222222222")
      // document.cookie = 'shopname' +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
       this.setState({
           owner:false,
-          photo : 'http://localhost:3001/uploads/'+this.state.photo.concat(data.informacion[0].photo),
-          items : this.state.items.concat(data) 
+          photo : 'http://localhost:8001/uploads/'+this.state.photo.concat(data.informacion[0].photo),
+          items : this.state.items.concat(data.informacion) 
       })
   }
   })
@@ -305,6 +306,8 @@ class Shop extends Component {
     
     
     }
+   // this.state.items.shift()
+    console.log(this.state.items)
     this.state.items.shift()
     let details = this.state.items.map(item => {
         return(
@@ -383,49 +386,6 @@ class Shop extends Component {
                       </tbody>
                   </table>
           </div> 
-  
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-  Launch demo modal
-</button>
-
-
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
       </div> 
   );

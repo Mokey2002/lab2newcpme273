@@ -32,8 +32,8 @@ class AuthService {
     });
   }
 
-  ShopData(username,shopname) {
-    return axios.post(API_URL + "shopData",{
+  shopItems(username,shopname) {
+    return axios.post(API_URL + "getShopItems",{
       username,
       shopname
     },{ headers: authHeader()}).then((response) => {
@@ -48,7 +48,21 @@ class AuthService {
       return response.data;
     });
   }
+  getAllShop() {
+    return axios.post(API_URL + "getAllShop",{
+    
+    }).then((response) => {
+      if (response.data.status == 201) {
+                         //localStorage.setItem("shopname", JSON.stringify(response.data.shopname));
+        return response.data;
+      }
+      else if(response.data.status == 200){
+        return response.data;
+      }
 
+      return response.data;
+    });
+  }
   
   AddItem(informacion) {
     console.log("item information")
