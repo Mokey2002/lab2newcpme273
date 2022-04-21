@@ -64,7 +64,8 @@ class Overview extends Component {
         console.log(e.target.value);
         const data={
             username: this.state.username.user.username,
-            itemname:e.target.value
+            itemname:e.target.value,
+            price:0 
         }
     
         AuthService.addCart(data) 

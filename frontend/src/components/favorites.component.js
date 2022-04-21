@@ -12,7 +12,8 @@ class Favorites extends Component {
     super(props);
 
     this.state = {  
-      items : []
+      items : [],
+      username: this.props
       
   };
   }
@@ -20,15 +21,18 @@ class Favorites extends Component {
 
 componentDidMount(){
   const data={
-      username: cookie.load('cookie')
+      username: this.state.username.user.username
   }
-  axios.post('http://localhost:3001/getfavorites',data)
+
+  AuthService.getFavorites(data) 
+  //axios.post('http://localhost:3001/getfavorites',data)
           .then((response) => {
-
-
+            console.log("favorites data")
+            console.log(response)
+            console.log("favorites data")
               if(response.status === 200){
                   this.setState({
-              items : this.state.items.concat(response.data) 
+              items : this.state.items.concat(response.informacion) 
           });
                   console.log("passed favorites")
               } else if(response.status === 201){

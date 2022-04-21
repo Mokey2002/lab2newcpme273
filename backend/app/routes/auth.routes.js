@@ -96,7 +96,14 @@ module.exports = function(app) {
     [
       authJwt.verifyToken
     ],
-    controller.addFavorites
+    controller.addFavorite
+  );
+  app.post(
+    "/api/auth/getFavorites",
+    [
+      authJwt.verifyToken
+    ],
+    controller.getFavorites
   );
 
   app.post("/api/auth/signin", controller.signin);

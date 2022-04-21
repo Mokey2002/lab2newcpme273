@@ -21,9 +21,11 @@ const Role = db.role;
 const Shop = db.shop;
 const ShopItem = db.shopItems;
 const Cart = db.cart;
+const Favorite = db.favorites;
 
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
+const { shopItems } = require("../models");
 
 
 exports.signup = (req, res) => {
@@ -283,15 +285,15 @@ exports.addCart =(req, res) => {
   console.log("add cart")
   let username = req.body.itemname.username;
   let name = req.body.itemname.itemname;
-  let price = req.body.itemname.price;
+  //let price = req.body.itemname.price;
   //let quantity = req.body.quantity;
 
 
   console.log("Adding Cart")
   const cartItem = new Cart({
     username:username,
-    itemname: name,
-    price: price
+    itemname: name
+   // price: price
 
   });
   cartItem.save((err, shop) => {
@@ -299,12 +301,100 @@ exports.addCart =(req, res) => {
       res.status(500).send({ message: err });
       return;
     }
-    else{
+  });
+  return res.status(200).send({ message: "Cart Item Added." });
 
-      return res.status(200).send({ message: "Cart Item Added." });
+};
+
+exports.addFavorite =(req, res) => {
+  console.log("Add favorite")
+  console.log("Favorite")
+  console.log(req.body)
+  console.log("add favorite")
+  let username = req.body.itemname.username;
+  let name = req.body.itemname.itemname;
+ 
+  //let quantity = req.body.quantity;
+
+
+  console.log("Adding favorite")
+  const FavoriteItem = new Favorite({
+    username:username,
+    itemname: name
+
+  });
+  FavoriteItem.save((err, shop) => {
+    if (err) {
+     
+      console.log(err)
+      res.status(500).send({ message: err });
+      return;
     }
   });
-  return  res.status(500).send({ message: "Error" });
+  console.log("Favorite")
+  return res.status(200).send({ message: "favorite Item Added." });
+
+};
+
+exports.getFavorites =(req, res) => {
+  console.log("get favorite")
+  console.log("")
+  console.log(req.body)
+  console.log("get favorite")
+  let username = req.body.itemname.username;
+  let name = req.body.itemname.itemname;
+ 
+  //let quantity = req.body.quantity;
+
+  Favorite.find({
+    username:username
+   // itemname: 
+  }).exec((err, items) => {
+      console.log("getItem  data")
+      console.log(items);
+      console.log("getItem   data")
+      if (err && (!res.headersSent)) {
+        res.status(500).send({ message: err });
+        return;
+      }
+      
+      var allitems=[]
+for (var j = 0; j < items.length; j++){
+
+  shopItems.find({
+    //username:username
+    itemname: items[j].itemname
+  }).exec((err, itemsfromshop)=> {
+    if (err && (!res.headersSent)) {
+      res.status(500).send({ message: err });
+      return;
+    }
+    for (var i = 0; i < itemsfromshop.length; i++){
+      console.log(itemsfromshop)
+      allitems.push(itemsfromshop[i]);
+    }
+
+  
+  });
+
+
+   // itemnames.push(items[j].itemname);
+   // console.log(items[j].itemname);
+  }
+
+
+  setTimeout(function(){
+    console.log("allitems")
+    console.log(allitems)
+    console.log("allitems")
+    return res.status(200).send({ status: 200,informacion:allitems });
+}, 2000);
+     // return res.status(200).send({ status: 200,informacion:allitems });
+
+   
+    
+    });
+ // return res.status(200).send({ message: "favorite Item Added." });
 
 };
 
