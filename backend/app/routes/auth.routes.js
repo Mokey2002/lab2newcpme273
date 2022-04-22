@@ -124,7 +124,7 @@ module.exports = function(app) {
   app.post(
     "/api/auth/updateUser",
     upload.single('image'),
-    controller.getUser
+    controller.updateUser
   );
 
   app.post("/api/auth/signin", controller.signin);

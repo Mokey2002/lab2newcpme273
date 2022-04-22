@@ -226,10 +226,16 @@ exports.getAllShop = (req, res) => {
 
 exports.updateUser = (req, res) => {
   console.log("Inside update user")
-
+  console.log("update user")
+  upload.single("image")
+  console.log(req.body)
+  console.log(req.body.user)
+ 
+  //console.log(req.headers)
+  console.log("update user")
   User.updateOne({
-    username: req.body.itemname.username
-  },{$set:{'name':req.body.itemname.username,'email':req.body.itemname.username,'city':req.body.itemname.city,'zip':req.body.itemname.zip,'street':req.body.itemname.street,'country':req.body.itemname.country,'photolocation':req.body.itemname.photo}).exec((err, user) => {
+    username: req.body.user
+  },{$set:{'name':req.body.name,'email':req.body.email,'city':req.body.city,'zip':req.body.zip,'street':req.body.street,'country':req.body.country,'photolocation':req.file.originalname,'phone':req.body.phone}}).exec((err, user) => {
       console.log("first  update user data")
       console.log(user);
       console.log("first update user data")

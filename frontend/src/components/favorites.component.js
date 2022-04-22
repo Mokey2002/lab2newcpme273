@@ -23,9 +23,8 @@ componentDidMount(){
   const data={
       username: this.state.username.user.username
   }
-
+//axios.post('http://localhost:3001/getfavorites',data)
   AuthService.getFavorites(data) 
-  //axios.post('http://localhost:3001/getfavorites',data)
           .then((response) => {
             console.log("favorites data")
             console.log(response)
