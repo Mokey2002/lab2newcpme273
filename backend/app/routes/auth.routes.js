@@ -105,6 +105,13 @@ module.exports = function(app) {
     ],
     controller.getFavorites
   );
+  app.post(
+    "/api/auth/getCart",
+    [
+      authJwt.verifyToken
+    ],
+    controller.getCart
+  );
 
   app.post("/api/auth/signin", controller.signin);
 };

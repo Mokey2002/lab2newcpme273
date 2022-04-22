@@ -13,16 +13,8 @@ class Cart extends Component {
     super(props);
 
     this.state = {  
-      name : "",
-      age: "",
-      street : "",
-      zip:"",
-      email : "",
-      phone: "",
-      city : "",
-      country : "",
-      user:  this.props,
-      photo:""
+        username:  this.props,
+      items : []
       
   };
 
@@ -36,13 +28,14 @@ class Cart extends Component {
         username: this.state.username.user.username,
         shopname: cookie.load('shopname')
     }
-    axios.post('http://localhost:3001/getcartitems',data)
+//    axios.post('http://localhost:3001/getcartitems',data)
+AuthService.getCart(data) 
             .then((response) => {
 
 
                 if(response.status === 200){
                     this.setState({
-                items : this.state.items.concat(response.data) 
+                items : this.state.items.concat(response.informacion) 
             });
                     console.log("passed favorites")
                 } else if(response.status === 201){

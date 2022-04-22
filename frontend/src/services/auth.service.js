@@ -127,6 +127,22 @@ class AuthService {
     });
   }
 
+  getCart(itemname) {
+    return axios.post(API_URL + "getCart",{itemname
+    
+    },{ headers: authHeader()}).then((response) => {
+      if (response.data.status == 201) {
+                         //localStorage.setItem("shopname", JSON.stringify(response.data.shopname));
+        return response.data;
+      }
+      else if(response.data.status == 200){
+        return response.data;
+      }
+
+      return response.data;
+    });
+  }
+
   AddItem(informacion) {
     console.log("item information")
     console.log(informacion)

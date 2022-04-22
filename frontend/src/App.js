@@ -130,6 +130,11 @@ class App extends Component {
                    Favorites
                   </Link>
                 </li>
+                <li  className="nav-item">
+                <Link to={"/cart"} className="nav-link">
+                   Cart
+                  </Link>
+                </li>
                 <li className="nav-item">
                   <a href="/login" className="nav-link" onClick={this.logOut}>
                     LogOut

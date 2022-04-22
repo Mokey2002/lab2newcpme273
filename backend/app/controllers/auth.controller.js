@@ -398,6 +398,69 @@ for (var j = 0; j < items.length; j++){
 
 };
 
+
+exports.getCart =(req, res) => {
+  console.log("get cart")
+  console.log("")
+  console.log(req.body)
+  console.log("get cart")
+  let username = req.body.itemname.username;
+  let name = req.body.itemname.itemname;
+ 
+  //let quantity = req.body.quantity;
+
+  Cart.find({
+    username:username
+   // itemname: 
+  }).exec((err, items) => {
+      console.log("getItem  data")
+      console.log(items);
+      console.log("getItem   data")
+      if (err && (!res.headersSent)) {
+        res.status(500).send({ message: err });
+        return;
+      }
+      
+      var allitems=[]
+for (var j = 0; j < items.length; j++){
+
+  shopItems.find({
+    //username:username
+    itemname: items[j].itemname
+  }).exec((err, itemsfromshop)=> {
+    if (err && (!res.headersSent)) {
+      res.status(500).send({ message: err });
+      return;
+    }
+    for (var i = 0; i < itemsfromshop.length; i++){
+      console.log(itemsfromshop)
+      allitems.push(itemsfromshop[i]);
+    }
+
+  
+  });
+
+
+   // itemnames.push(items[j].itemname);
+   // console.log(items[j].itemname);
+  }
+
+
+  setTimeout(function(){
+    console.log("allitems")
+    console.log(allitems)
+    console.log("allitems")
+    return res.status(200).send({ status: 200,informacion:allitems });
+}, 2000);
+     // return res.status(200).send({ status: 200,informacion:allitems });
+
+   
+    
+    });
+ // return res.status(200).send({ message: "favorite Item Added." });
+
+};
+
 exports.signin = (req, res) => {
   User.findOne({
     username: req.body.username
