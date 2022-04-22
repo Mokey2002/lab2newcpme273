@@ -61,7 +61,21 @@ AuthService.getCart(data)
                      <td> <figure> {'http://localhost:3001/uploads/'+item.photo && <img src={'http://localhost:3001/uploads/'+item.photo} name={item.itemname} alt="img"/>} <figcaption>{item.itemname} </figcaption></figure></td>
                 
                     <td>{item.price}</td>
-                    <td>{item.quantity}</td>
+                   
+                    <td class="pt-3-half" contenteditable="true"><input type="text" name="add1" value={item.quantity} class="border-none"></input></td>
+                    <td>         <div class="form-check">
+                      <label>
+                          <input type= "checkbox" name="outOfStock" checked={this.state.outOfStock}  onChange = {this.outOfStockOptionChangeHandler} class="form-check-input" />
+                         Gift
+                      </label> 
+              </div></td>
+                    <td>
+                    <div style={{width: '10%'}}>
+                        <button value={item.itemname} onClick={this.handleClickFavorites} class="btn btn-success" type="submit">Delete</button>
+                    </div>
+
+
+                    </td>
                 </tr>
             )
         })
@@ -84,6 +98,8 @@ AuthService.getCart(data)
                                     <th>Item</th>
                                     <th>Price</th>
                                     <th>Quantity</th>
+                                    <th>Gift</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
