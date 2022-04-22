@@ -395,9 +395,9 @@ exports.getFavorites =(req, res) => {
     username:username
    // itemname: 
   }).exec((err, items) => {
-      console.log("getItem  data")
+      console.log("getfavoirtes  data")
       console.log(items);
-      console.log("getItem   data")
+      console.log("getfavoirtes   data")
       if (err && (!res.headersSent)) {
         res.status(500).send({ message: err });
         return;
