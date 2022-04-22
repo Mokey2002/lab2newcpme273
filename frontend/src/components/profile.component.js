@@ -1,16 +1,184 @@
 import React, { Component } from "react";
 import { Redirect } from 'react-router-dom';
 import { connect } from "react-redux";
-
+import axios from 'axios';
+import cookie from 'react-cookies';
 class Profile extends Component {
+
+  constructor(props){
+    //Call the constrictor of Super class i.e The Component
+    super(props);
+    //default val
+    this.state = {
+        name : "",
+        age: "",
+        street : "",
+        zip:"",
+        email : "",
+        phone: "",
+        city : "",
+        country : "",
+        user: cookie.load('cookie'),
+      
+        photo:""
+    }
+    //Bind the handlers to this class
+    this.namehandler = this.namehandler.bind(this);
+    this.agehandler = this.agehandler.bind(this);
+    this.streethandler = this.streethandler.bind(this);
+    this.ziphandler = this.ziphandler.bind(this);
+    this.emailhandler = this.emailhandler.bind(this);
+    this.phonehandler = this.phonehandler.bind(this);
+    this.cityhandler = this.cityhandler.bind(this);
+    this.countryhandler = this.countryhandler.bind(this);
+
+    this.userhandler = this.userhandler.bind(this);
+    this.imageHandler = this.imageHandler.bind(this);
+    this.submitLogin = this.submitLogin.bind(this);
+}
+imageHandler= (event)=>{
+  this.setState({
+      photo : event.target.files[0]
+  })
+
+}
+
+    //title change handler
+    namehandler = (e) => {
+      this.setState({
+          name : e.target.value
+      })
+  }
+      //title change handler
+      userhandler = (e) => {
+          this.setState({
+              user : e.target.value
+          })
+      }
+
+
+      //title change handler
+      agehandler = (e) => {
+          this.setState({
+              age : e.target.value
+          })
+      }
+          //title change handler
+          streethandler = (e) => {
+      this.setState({
+          street : e.target.value
+      })
+  }
+      //title change handler
+      ziphandler = (e) => {
+          this.setState({
+              zip : e.target.value
+          })
+      }
+          //title change handler
+   emailhandler = (e) => {
+      this.setState({
+          email : e.target.value
+      })
+  }
+  cityhandler = (e) => {
+      this.setState({
+          city : e.target.value
+      })
+  }
+  phonehandler = (e) => {
+      this.setState({
+          phone : e.target.value
+      })
+  }
+  countryhandler = (e) => {
+      this.setState({
+          country : e.target.value
+      })
+  }
+
+
+
+  submitLogin = (e) => {
+
+    e.preventDefault();
+    
+    const file= this.state.photo;
+   // const data = cookie.load('cookie')// {  username:"adfafsd"}// cookie.load('cookie')}
+
+    const formData = new FormData()
+    formData.append('image',file)
+    formData.append('street',this.state.street )
+    formData.append('name', this.state.name)
+    formData.append('age', this.state.age)
+    formData.append('email', this.state.email)
+    formData.append('phone', this.state.phone)
+    formData.append('city', this.state.city)
+    formData.append('country', this.state.country)
+    formData.append('zip', this.state.zip)
+    formData.append('user',cookie.load('cookie'))
+
+    console.log("File");
+    
+    console.log("File");
+
+    //send data to backend
+    axios.post('http://localhost:3001/updateuser',formData,{
+        headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+    })
+        .then(response => {
+            console.log("Status Code Register : ",response.status);
+            if(response.status === 200){
+                this.setState({
+                    successflag : true,
+                    duplicateid : false
+                })
+            }else if(response.status === 201){
+                this.setState({
+                    successflag : false,
+                    duplicateid: true
+                })
+            }
+        }); 
+}
 
   render() {
     const { user: currentUser } = this.props;
 
+
+    let {photo} = this.state;
+    let setImage = '';
+    console.log("foto");
+    console.log(photo);
+    console.log("foto");
+    //set values 
+    let {successflag} = this.state;
+    let success = null;
+   // let [uploadStatus, setUploadStatus] = useState('');
+    let loginredirect = null;         
+    let repeteatedid;
+    let {duplicateid} = this.state;
+    let userinfo = null;
+    //check if user logged in
     if (!currentUser) {
       return <Redirect to="/login" />;
     }
-
+    else{
+       let user = currentUser.username//cookie.load('cookie');//<td>{a}</td> 
+        console.log(user);
+       userinfo= <div class="alert alert-danger" role="alert">
+        <td>{user}</td> 
+    </div>
+    }
+    //tell user that id is alredy in DB
+    if(duplicateid){
+        repeteatedid = 
+        <div class="alert alert-danger" role="alert">
+            <td>"ID already in Database"</td> 
+        </div>
+    }
     return (
       <div>
       {loginredirect}
