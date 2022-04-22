@@ -224,6 +224,26 @@ exports.getAllShop = (req, res) => {
     });
 };
 
+exports.updateUser = (req, res) => {
+  console.log("Inside update user")
+
+  User.updateOne({
+    username: req.body.itemname.username
+  },{$set:{'name':req.body.itemname.username,'email':req.body.itemname.username,'city':req.body.itemname.city,'zip':req.body.itemname.zip,'street':req.body.itemname.street,'country':req.body.itemname.country,'photolocation':req.body.itemname.photo}).exec((err, user) => {
+      console.log("first  update user data")
+      console.log(user);
+      console.log("first update user data")
+      if (err) {
+        res.status(500).send({ message: err });
+        return;
+      }
+      return res.status(200).send({ status: 200,informacion:user });
+
+   
+    
+    });
+};
+
 exports.getItem = (req, res) => {
   console.log("Inside getItem")
   console.log(req.body);

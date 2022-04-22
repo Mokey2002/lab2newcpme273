@@ -127,10 +127,10 @@ class AuthService {
     });
   }
 
-  getFavorites(itemname) {
-    return axios.post(API_URL + "getFavorites",{itemname
+  updateUser(itemname) {
+    return axios.post(API_URL + "updateUser",{itemname
     
-    },{ headers: authHeader()}).then((response) => {
+    },{ headers: {'Content-Type':'multipart/form-data'}}).then((response) => {
       if (response.data.status == 201) {
                          //localStorage.setItem("shopname", JSON.stringify(response.data.shopname));
         return response.data;

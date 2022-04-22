@@ -121,5 +121,11 @@ module.exports = function(app) {
     controller.getUser
   );
 
+  app.post(
+    "/api/auth/updateUser",
+    upload.single('image'),
+    controller.getUser
+  );
+
   app.post("/api/auth/signin", controller.signin);
 };

@@ -157,16 +157,16 @@ componentDidMount(){
           //update the state with the response data
           console.log(response.user[0].Name);
           this.setState({
-              name :  this.state.name.concat(response.user[0].Name),
+              name :  this.state.name.concat(response.user[0].username),
               age:  this.state.age.concat(response.user[0].Age),
               street :  this.state.street.concat(response.user[0].street),
-              zip: this.state.zip.concat(response.user[0].Zip),
-              email : this.state.email.concat(response.user[0].Email),
-              phone:  this.state.phone.concat(response.user[0].Phone),
+              zip: this.state.zip.concat(response.user[0].zip),
+              email : this.state.email.concat(response.user[0].email),
+              phone:  this.state.phone.concat(response.user[0].phone),
               city :  this.state.city.concat(response.user[0].city),
              // country : this.state.country.concat(response.user[0].Country),
              
-              photo : 'http://localhost:3001/uploads/'+this.state.photo.concat(response.data.photo),
+              photo : 'http://localhost:3001/uploads/'+this.state.photo.concat(response.user[0].photolocation),
           });
       });
 } 
@@ -231,10 +231,7 @@ componentDidMount(){
                  
              </label>
              <br/>
-             <label>
-                Age:     <input  onChange = {this.agehandler} type="text" class="form-control" name="booktitle" placeholder="Age" value={this.state.age} />
-             </label>
-             <br/>
+
              <label>
                  Email:
                      <input onChange = {this.emailhandler} type="text" class="form-control" name="bookauthor" placeholder="email" value={this.state.email}/>
