@@ -113,5 +113,13 @@ module.exports = function(app) {
     controller.getCart
   );
 
+  app.post(
+    "/api/auth/getUser",
+    [
+      authJwt.verifyToken
+    ],
+    controller.getUser
+  );
+
   app.post("/api/auth/signin", controller.signin);
 };

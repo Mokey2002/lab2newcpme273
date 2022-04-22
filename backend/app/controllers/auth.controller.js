@@ -243,6 +243,25 @@ exports.getItem = (req, res) => {
     
     });
 };
+exports.getUser = (req, res) => {
+  console.log("Inside getUser")
+  console.log(req.body);
+  User.find({
+    username: req.body.itemname.username
+  }).exec((err, user) => {
+      console.log("getUSER  data")
+      console.log(user);
+      console.log("getUser   data")
+      if (err) {
+        res.status(500).send({ message: err });
+        return;
+      }
+      return res.status(200).send({ status: 200,user });
+
+   
+    
+    });
+};
 exports.addItem =(req, res) => {
   console.log("Add Item")
   upload.single("image")

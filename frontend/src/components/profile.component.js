@@ -3,6 +3,7 @@ import { Redirect } from 'react-router-dom';
 import { connect } from "react-redux";
 import axios from 'axios';
 import cookie from 'react-cookies';
+import AuthService from "../services/auth.service";
 class Profile extends Component {
 
   constructor(props){
@@ -18,7 +19,7 @@ class Profile extends Component {
         phone: "",
         city : "",
         country : "",
-        user: cookie.load('cookie'),
+        username: this.props,
       
         photo:""
     }
@@ -116,19 +117,20 @@ imageHandler= (event)=>{
     formData.append('city', this.state.city)
     formData.append('country', this.state.country)
     formData.append('zip', this.state.zip)
-    formData.append('user',cookie.load('cookie'))
+    formData.append('user',this.state.username.user.username,)
 
     console.log("File");
     
     console.log("File");
 
     //send data to backend
+    /*
     axios.post('http://localhost:3001/updateuser',formData,{
         headers: {
             'Content-Type': 'multipart/form-data'
           }
-    })
-        .then(response => {
+    })*/
+    AuthService.updateUser(formData).then(response => {
             console.log("Status Code Register : ",response.status);
             if(response.status === 200){
                 this.setState({
@@ -143,6 +145,31 @@ imageHandler= (event)=>{
             }
         }); 
 }
+
+componentDidMount(){
+  const data={
+      username: this.state.username.user.username
+
+  }
+  AuthService.getUser(data)
+  //axios.post('http://localhost:3001/getuserinfo',data)
+          .then((response) => {
+          //update the state with the response data
+          console.log(response.user[0].Name);
+          this.setState({
+              name :  this.state.name.concat(response.user[0].Name),
+              age:  this.state.age.concat(response.user[0].Age),
+              street :  this.state.street.concat(response.user[0].street),
+              zip: this.state.zip.concat(response.user[0].Zip),
+              email : this.state.email.concat(response.user[0].Email),
+              phone:  this.state.phone.concat(response.user[0].Phone),
+              city :  this.state.city.concat(response.user[0].city),
+             // country : this.state.country.concat(response.user[0].Country),
+             
+              photo : 'http://localhost:3001/uploads/'+this.state.photo.concat(response.data.photo),
+          });
+      });
+} 
 
   render() {
     const { user: currentUser } = this.props;
