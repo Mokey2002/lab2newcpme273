@@ -15,10 +15,10 @@ class Cart extends Component {
     this.state = {  
         username:  this.props,
       items : []
-      
+     
   };
 
-  
+  this.handleDelete = this.handleDelete.bind(this);
   }
 
   handleDelete (e){

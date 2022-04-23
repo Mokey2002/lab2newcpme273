@@ -26,7 +26,7 @@ const ShopHistory = db.shopHistory;
 
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
-const { shopItems, shopHistory } = require("../models");
+const { shopItems, shopHistory, cart } = require("../models");
 
 
 exports.signup = (req, res) => {
@@ -227,10 +227,11 @@ exports.getAllShop = (req, res) => {
 
 exports.deleteItemShop = (req, res) => {
   console.log("Inside deleteItemShop")
-
-  ShopHistory.remove({
-    itemname: res.body.itemname.itemname,
-    username: res.body.itemname.username
+  console.log(req.body)
+  console.log("Inside deleteItemShop")
+  Cart.remove({
+    itemname: req.body.itemname.itemname,
+    username: req.body.itemname.username
   }).exec((err, user) => {
       console.log("first result  data")
       console.log(user);
