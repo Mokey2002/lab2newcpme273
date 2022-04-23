@@ -55,6 +55,8 @@ componentDidMount(){
                <td> <figure> {'http://localhost:3001/uploads/'+item.photo && <img src={'http://localhost:3001/uploads/'+item.photo} name={item.itemname} alt="img"/>} <figcaption>{item.itemname} </figcaption></figure></td>
                   <td>{item.price}</td>
                   <td>{item.description}</td>
+                  <td>{item.quantity}</td>
+                  <td>{item.gift}</td>
               </tr>
           )
       })
@@ -78,16 +80,10 @@ componentDidMount(){
 </div>
 
 
-                  <h2>Favorite Items</h2>
+                  <h2>Purchase History</h2>
 
 
-<form class="form-inline">
-<div class="form-group ">
-  <label for="inputPassword2" class="sr-only">Password</label>
-  <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
-</div>
-<button type="submit" class="btn btn-primary mb-2">Search</button>
-</form>
+
 
                       <table class="table">
                           <thead>
@@ -97,6 +93,7 @@ componentDidMount(){
                                   <th>Price</th>
                                   <th>Description</th>
                                   <th>Quantity</th>
+                                  <th>Gift Wrapped</th>
 
                               </tr>
                           </thead>

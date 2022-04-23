@@ -21,7 +21,36 @@ class Cart extends Component {
   
   }
 
+  handleDelete (e){
+    //e.stopPropagation();
+    // access to e.target here
+    console.log("OVERVIEW");
+    console.log(e.target.value);
+    console.log("OVERVIEW");
 
+    const data={
+        username: this.state.username.user.username,
+        itemname:e.target.value
+    }
+//    axios.post('http://localhost:3001/getcartitems',data)
+AuthService.deleteItemShop(data) 
+            .then((response) => {
+
+
+                if(response.status === 200){
+ 
+                    console.log("Item delteds")
+                } else if(response.status === 201){
+                    console.log("Item not delted")
+                }
+
+            //update the state with the response data
+          //  this.setState({
+          //      books : this.state.books.concat(response.data) 
+           // });
+        });
+    
+}
 
   componentDidMount(){
     const data={
@@ -144,7 +173,7 @@ console.log("cell values");
               </div></td>
                     <td>
                     <div style={{width: '10%'}}>
-                        <button value={item.itemname} onClick={this.handleClickFavorites} class="btn btn-success" type="submit">Delete</button>
+                        <button value={item.itemname} onClick={this.handleDelete} class="btn btn-success" type="submit">Delete</button>
                     </div>
 
 

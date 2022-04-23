@@ -136,6 +136,10 @@ class App extends Component {
                 <Link to={"/cart"} className="nav-link">
                    Cart
                   </Link>
+                  <Link to={"/ShopHistory"} className="nav-link">
+                  History
+                  </Link>
+                  
                 </li>
                 <li className="nav-item">
                   <a href="/login" className="nav-link" onClick={this.logOut}>
