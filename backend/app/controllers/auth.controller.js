@@ -225,6 +225,27 @@ exports.getAllShop = (req, res) => {
     });
 };
 
+exports.deleteItemShop = (req, res) => {
+  console.log("Inside deleteItemShop")
+
+  ShopHistory.remove({
+    itemname: res.body.itemname.itemname,
+    username: res.body.itemname.username
+  }).exec((err, user) => {
+      console.log("first result  data")
+      console.log(user);
+      console.log("first result   data")
+      if (err) {
+        res.status(500).send({ message: err });
+        return;
+      }
+      return res.status(200).send({ status: 200,informacion:user });
+
+   
+    
+    });
+};
+
 exports.updateUser = (req, res) => {
   console.log("Inside update user")
   console.log("update user")

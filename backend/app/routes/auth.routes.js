@@ -140,5 +140,12 @@ module.exports = function(app) {
     ],
     controller.getHistory
   );
+  app.post(
+    "/api/auth/deleteItemShop",
+    [
+      authJwt.verifyToken
+    ],
+    controller.deleteItemShop
+  );
   app.post("/api/auth/signin", controller.signin);
 };
