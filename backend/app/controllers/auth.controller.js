@@ -22,6 +22,7 @@ const Shop = db.shop;
 const ShopItem = db.shopItems;
 const Cart = db.cart;
 const Favorite = db.favorites;
+const ShopHistory = db.shopHistory;
 
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
@@ -378,6 +379,52 @@ exports.addFavorite =(req, res) => {
   });
   console.log("Favorite")
   return res.status(200).send({ message: "favorite Item Added." });
+
+};
+
+//item bought by user
+exports.addShopping =(req, res) => {
+  console.log("Add shopping")
+  console.log(req.body)
+  console.log("Add shopping")
+ // let username = req.body.itemname.username;
+  //let name = req.body.itemname.itemname;
+ 
+  //let quantity = req.body.quantity;
+
+
+  console.log("Adding favorite")
+  for (var i= 0; i<req.body.itemname.length;i++)
+{   
+
+  const itembought = new ShopHistory({
+    username: req.body.itemname[i].username,
+    shopname: req.body.itemname[i].shopname,
+    itemname: req.body.itemname[i].itemname,
+    category: req.body.itemname[i].category,
+    description : req.body.itemname[i].description,
+    price  : req.body.itemname[i].price,
+    quantity: req.body.itemname[i].quantity,
+    photolocation: req.body.itemname[i].photolocation,
+    gift: req.body.itemname[i].gift,
+    id: req.body.itemname[i]._id
+
+  });
+  itembought.save((err, shop) => {
+    if (err) {
+     
+      console.log(err)
+      res.status(500).send({ message: err });
+      return;
+    }
+  });
+
+}
+ 
+
+
+  console.log("added to bought database")
+  return res.status(200).send({ message: "ITtem bought ." });
 
 };
 

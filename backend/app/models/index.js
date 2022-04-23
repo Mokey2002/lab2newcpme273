@@ -11,7 +11,7 @@ db.cart = require("./cart.model");
 db.favorites = require("./favorites.model");
 db.shop = require("./shop.model");
 db.shopItems = require("./shopitems.model");
-
+db.shopHistory = require("./shophistory.model");
 db.ROLES = ["user", "admin", "moderator"];
 
 module.exports = db;

@@ -126,6 +126,12 @@ module.exports = function(app) {
     upload.single('image'),
     controller.updateUser
   );
-
+  app.post(
+    "/api/auth/addShopping",
+    [
+      authJwt.verifyToken
+    ],
+    controller.addShopping
+  );
   app.post("/api/auth/signin", controller.signin);
 };
