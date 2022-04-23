@@ -133,5 +133,12 @@ module.exports = function(app) {
     ],
     controller.addShopping
   );
+  app.post(
+    "/api/auth/getHistory",
+    [
+      authJwt.verifyToken
+    ],
+    controller.getHistory
+  );
   app.post("/api/auth/signin", controller.signin);
 };

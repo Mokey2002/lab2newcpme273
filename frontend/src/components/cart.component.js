@@ -25,8 +25,7 @@ class Cart extends Component {
 
   componentDidMount(){
     const data={
-        username: this.state.username.user.username,
-        shopname: cookie.load('shopname')
+        username: this.state.username.user.username
     }
 //    axios.post('http://localhost:3001/getcartitems',data)
 AuthService.getCart(data) 
@@ -110,6 +109,7 @@ console.log("cell values");
         .then(res => {
             if(res){
                 console.log(res)
+                window.location.href='/ShopHistory'
                 this.setState({
                     authFlag : false,
                     products : (res.data)
@@ -157,6 +157,7 @@ console.log("cell values");
         if(1==2){
             redirectVar = <Redirect to= "/login"/>
         }
+
         return(
             <div>
                 {redirectVar}

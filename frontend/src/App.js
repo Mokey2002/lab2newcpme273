@@ -18,6 +18,8 @@ import Favorites from "./components/favorites.component";
 import Update from "./components/update.component";
 import Cart from "./components/cart.component";
 import Overview from "./components/overview.component";
+import ShopHistory from "./components/shophistory.component";
+
 import { logout } from "./actions/auth";
 import { clearMessage } from "./actions/message";
 
@@ -174,6 +176,8 @@ class App extends Component {
               <Route path="/update" component={Update} />
               <Route path="/cart" component={Cart} />
               <Route path="/Overview" component={Overview} />
+            
+              <Route path="/ShopHistory" component={ShopHistory} />
             </Switch>
           </div>
 
