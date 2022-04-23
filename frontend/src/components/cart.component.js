@@ -49,7 +49,81 @@ AuthService.getCart(data)
         });
 }
 
+submitLogin = (e) => {
+    //var headers = new Headers();
+    //prevent page from refresh
+    e.preventDefault();
+    var itemsinfo = this.state.items
 
+    var newquan = []
+    document.querySelectorAll('input').forEach( input => {
+        console.log('value')
+        console.log(input.value)
+        console.log(Number.isInteger(parseInt(input.value)))
+        console.log('value')
+        if (Number.isInteger(parseInt(input.value)))
+        {
+            console.log('value')
+            console.log(input.value)
+            console.log('value')
+            newquan.push(input.value); 
+        }
+      });
+
+      console.log("NEWQUAN")
+      console.log(newquan)
+      console.log("NEWQUAN")
+    //get checked check boxes 
+    var checkboxes = document.getElementsByName("outOfStock");
+    var arrayVal = [];
+    for (var i= 0; i<checkboxes.length;i++)
+     {
+
+        if (checkboxes[i].checked === true)
+        {
+            arrayVal.push(checkboxes[i].value); 
+        }
+     }
+
+
+
+for (var i= 0; i<itemsinfo.length;i++)
+{   if(arrayVal.includes(itemsinfo[i]["itemname"])){
+    itemsinfo[i]["gift"]='Yes';
+
+    }else{
+        itemsinfo[i]["gift"]='No';
+    }
+    itemsinfo[i]['quantity']=newquan[i];
+
+}
+
+console.log("cell values");
+console.log(itemsinfo);
+console.log(arrayVal);
+console.log("cell values");
+    //set the with credentials to true
+  
+    //make a post request with the user data
+    AuthService.addShopping(itemsinfo)
+    //axios.post('http://localhost:3001/getfiletered',data)
+        .then(res => {
+            if(res){
+                console.log(res)
+                this.setState({
+                    authFlag : false,
+                    products : (res.data)
+                })
+               
+            }else{
+                this.setState({
+                    authFlag : true,
+                    
+                })
+            }
+        });
+
+    }
     render(){
         //iterate over books to create a table row
         let total=this.state.items.reduce((n, {price}) => n + parseFloat(price), 0)
@@ -61,11 +135,10 @@ AuthService.getCart(data)
                      <td> <figure> {'http://localhost:3001/uploads/'+item.photo && <img src={'http://localhost:3001/uploads/'+item.photo} name={item.itemname} alt="img"/>} <figcaption>{item.itemname} </figcaption></figure></td>
                 
                     <td>{item.price}</td>
-                   
-                    <td class="pt-3-half" contenteditable="true"><input type="text" name="add1" value={item.quantity} class="border-none"></input></td>
+                    <td><input onChange = {this.minPriceChangeHandler} type="number" class="form-control"  placeholder={item.itemname} /></td>
                     <td>         <div class="form-check">
                       <label>
-                          <input type= "checkbox" name="outOfStock" checked={this.state.outOfStock}  onChange = {this.outOfStockOptionChangeHandler} class="form-check-input" />
+                          <input type= "checkbox" name="outOfStock"  class="form-check-input" value={item.itemname} />
                          Gift
                       </label> 
               </div></td>
@@ -98,6 +171,7 @@ AuthService.getCart(data)
                                     <th>Item</th>
                                     <th>Price</th>
                                     <th>Quantity</th>
+                                 
                                     <th>Gift</th>
                                     <th>Action</th>
                                 </tr>
@@ -111,7 +185,7 @@ AuthService.getCart(data)
                         <div>
                <p><i>Total  ${total}</i></p> 
                <div style={{width: '10%'}}>
-                    <button  onClick = {this.handleOverviewClick} class="btn btn-success" type="submit">Checkout</button>
+                    <button  onClick = {this.submitLogin} class="btn btn-success" type="submit">Checkout</button>
                     </div>
                 </div>
                 </div> 
