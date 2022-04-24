@@ -445,8 +445,27 @@ exports.addShopping =(req, res) => {
  
 
 
-  console.log("added to bought database")
-  return res.status(200).send({ message: "ITtem bought ." });
+  setTimeout(function(){
+
+    Cart.remove({
+      username: req.body.itemname[0].username
+    }).exec((err, user) => {
+        console.log("first result  data")
+        console.log(user);
+        console.log("first result   data")
+        if (err) {
+          res.status(500).send({ message: err });
+          return;
+        }
+        //return res.status(200).send({ status: 200,informacion:user });
+    
+     
+      
+      });
+    console.log("added to bought database")
+    return res.status(200).send({ message: "ITtem bought ." });;
+}, 3000);
+
 
 };
 
