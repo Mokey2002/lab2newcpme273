@@ -10,6 +10,7 @@ const ShopHistory = mongoose.model(
     description : String,
     price  : String,
     quantity: String,
+    note: String,
     photolocation: String,
     gift: String,
     id: String,

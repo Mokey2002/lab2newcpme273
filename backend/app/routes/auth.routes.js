@@ -147,5 +147,13 @@ module.exports = function(app) {
     ],
     controller.deleteItemShop
   );
+
+  app.post(
+    "/api/auth/getFiltered",
+    [
+      authJwt.verifyToken
+    ],
+    controller.getFiltered
+  );
   app.post("/api/auth/signin", controller.signin);
 };

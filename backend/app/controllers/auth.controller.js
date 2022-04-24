@@ -26,7 +26,7 @@ const ShopHistory = db.shopHistory;
 
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
-const { shopItems, shopHistory, cart } = require("../models");
+const { shopItems, shopHistory, cart, shop } = require("../models");
 
 
 exports.signup = (req, res) => {
@@ -429,7 +429,8 @@ exports.addShopping =(req, res) => {
     quantity: req.body.itemname[i].quantity,
     photolocation: req.body.itemname[i].photolocation,
     gift: req.body.itemname[i].gift,
-    id: req.body.itemname[i]._id
+    id: req.body.itemname[i]._id,
+    note:req.body.itemname[i].note
 
   });
   itembought.save((err, shop) => {
@@ -569,6 +570,47 @@ exports.getHistory =(req, res) => {
 
 };
 
+
+
+//get purchasing history
+exports.getFiltered =(req, res) => {
+  console.log("get history")
+  console.log("")
+  console.log(req.body)
+  let itemnombre = req.body.itemname.term;
+  console.log(itemnombre)
+  console.log("get history")
+  
+
+  //let quantity = req.body.quantity;
+
+  ShopItem.find({
+    itemname:itemnombre
+   // itemname: 
+  }).exec((err, items) => {
+      console.log("getItem  data")
+      console.log(items);
+      console.log("getItem   data")
+      if (err && (!res.headersSent)) {
+        res.status(500).send({ message: err });
+        return;
+      }
+      
+
+  setTimeout(function(){
+    console.log("allitems")
+    console.log(items)
+    console.log("allitems")
+    return res.status(200).send({ status: 200,informacion:items });
+}, 2000);
+     // return res.status(200).send({ status: 200,informacion:allitems });
+
+   
+    
+    });
+ // return res.status(200).send({ message: "favorite Item Added." });
+
+};
 
 exports.getCart =(req, res) => {
   console.log("get cart")

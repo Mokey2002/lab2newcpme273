@@ -7,6 +7,7 @@ import cookie from 'react-cookies';
 import AuthService from "../services/auth.service";
 import {Link} from 'react-router-dom';
 import au from '../img/ua.jpg';
+import DataTable from 'react-data-table-component';
 class ShopHistory extends Component {
   constructor(props) {
     super(props);
@@ -32,6 +33,7 @@ componentDidMount(){
               if(response.status === 200){
                   this.setState({
               items : this.state.items.concat(response.informacion) 
+              
           });
                   console.log("passed favorites")
               } else if(response.status === 201){
@@ -47,7 +49,44 @@ componentDidMount(){
 
 
   render() {
+
+    const columns = [
+      {
+          name: 'Receipt ID',
+          selector: row => row.id,
+          sortable: true,
+      },
+      {
+          name: 'Item',
+          selector: row => row.itemname,
+          sortable: true,
+      },
+      {
+        name: 'Description',
+        selector: row => row.description,
+        sortable: true,
+    },
+    {
+        name: 'Quantity',
+        selector: row => row.quantity,
+        sortable: true,
+    },
+    {
+      name: 'Gift Wrapped',
+      selector: row => row.gift,
+      sortable: true,
+  },
+  {
+    name: 'Note',
+    selector: row => row.note,
+    sortable: true,
+},
+
+  ];
+  
+
             //iterate over books to create a table row
+            console.log(this.state.items)
         let details = this.state.items.map(item => {
           return(
               <tr>
@@ -57,9 +96,11 @@ componentDidMount(){
                   <td>{item.description}</td>
                   <td>{item.quantity}</td>
                   <td>{item.gift}</td>
+                  <td>{item.note}</td>
               </tr>
           )
       })
+      console.log(details)
       //if not logged in go to login page
       let redirectVar = null;
       if(3==1){
@@ -69,7 +110,10 @@ componentDidMount(){
           <div>
               {redirectVar}
               <div class="container">
+          <div>
 
+  
+          </div>
               <div class="outer">
               <img src={au} class="rounded" ></img>
   <div class="inner">
@@ -84,26 +128,13 @@ componentDidMount(){
 
 
 
-
-                      <table class="table">
-                          <thead>
-                              <tr>
-                                  <th>Receipt ID</th>
-                                  <th>Item</th>
-                                  <th>Price</th>
-                                  <th>Description</th>
-                                  <th>Quantity</th>
-                                  <th>Gift Wrapped</th>
-
-                              </tr>
-                          </thead>
-                          <tbody>
-                              {/*Display the Tbale row based on data recieved*/}
-                              {details}
-       
-
-                          </tbody>
-                      </table>
+                    
+                  <DataTable
+            pagination
+            columns={columns}
+            data={this.state.items}
+            paginationRowsPerPageOptions= {[ 2, 5, 10]}
+        />
               </div> 
           </div> 
       )

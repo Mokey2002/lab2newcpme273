@@ -26,20 +26,22 @@ class Home extends Component {
     this.outOfStockOptionChangeHandler = this.outOfStockOptionChangeHandler.bind(this);
     this.submitLogin = this.submitLogin.bind(this);
     //this.handleClickFavorites = this.handleClickFavorites(this);
-
+    this.handleClickFavorites = this.handleClickFavorites.bind(this);
 }  
 
 
-  handleClickFavorites (e){
+
+handleClickFavorites (e){
     //e.stopPropagation();
     // access to e.target here
     console.log(e.target.value);
 
     const data={
-        username: cookie.load('cookie'),
+        username: this.state.username.user.username,
         itemname:e.target.value
     }
-    axios.post('http://localhost:3001/addfavorites',data)
+    AuthService.addFavorites(data) 
+    //axios.post('http://localhost:3001/addfavorites',data)
             .then((response) => {
 
 
@@ -54,9 +56,8 @@ class Home extends Component {
           //      books : this.state.books.concat(response.data) 
            // });
         });
-
-
 }
+
 handleshopclick (e){
   //e.stopPropagation();
   // access to e.target here
@@ -169,15 +170,16 @@ componentDidMount(){
         selectedOption: this.state.selectedOption,
     }
     //set the with credentials to true
-    axios.defaults.withCredentials = true;
+    
     //make a post request with the user data
-    axios.post('http://localhost:3001/getfiletered',data)
+    AuthService.getFiltered(data) 
+    //axios.post('http://localhost:3001/getfiletered',data)
         .then(res => {
             if(res){
                 console.log(res)
                 this.setState({
                     authFlag : false,
-                    products : (res.data)
+                    products : (res.informacion)
                 })
                
             }else{

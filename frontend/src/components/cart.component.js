@@ -84,6 +84,7 @@ submitLogin = (e) => {
     var itemsinfo = this.state.items
 
     var newquan = []
+    var notes = []
     document.querySelectorAll('input').forEach( input => {
         console.log('value')
         console.log(input.value)
@@ -116,14 +117,26 @@ submitLogin = (e) => {
 
 
 for (var i= 0; i<itemsinfo.length;i++)
-{   if(arrayVal.includes(itemsinfo[i]["itemname"])){
+{ 
+    console.log("itemname")
+    console.log(itemsinfo[i]["itemname"])
+    console.log("itemname")
+    
+    if(arrayVal.includes(itemsinfo[i]["itemname"])){
+
     itemsinfo[i]["gift"]='Yes';
 
     }else{
         itemsinfo[i]["gift"]='No';
     }
+    if(document.getElementById(itemsinfo[i]["itemname"]).value !=null){
+        itemsinfo[i]['note']=document.getElementById(itemsinfo[i]["itemname"]).value;
+    }else{
+        itemsinfo[i]['note']=""
+    }
+   
     itemsinfo[i]['quantity']=newquan[i];
-
+ 
 }
 
 console.log("cell values");
@@ -131,7 +144,7 @@ console.log(itemsinfo);
 console.log(arrayVal);
 console.log("cell values");
     //set the with credentials to true
-  
+ 
     //make a post request with the user data
     AuthService.addShopping(itemsinfo)
     //axios.post('http://localhost:3001/getfiletered',data)
@@ -152,6 +165,9 @@ console.log("cell values");
             }
         });
 
+
+
+
     }
     render(){
         //iterate over books to create a table row
@@ -171,6 +187,8 @@ console.log("cell values");
                          Gift
                       </label> 
               </div></td>
+              <td class="pt-3-half" contenteditable="true"><input type="text" id={item.itemname}  class="border-none"></input></td>
+
                     <td>
                     <div style={{width: '10%'}}>
                         <button value={item.itemname} onClick={this.handleDelete} class="btn btn-success" type="submit">Delete</button>
@@ -200,9 +218,9 @@ console.log("cell values");
                                 <tr>
                                     <th>Item</th>
                                     <th>Price</th>
-                                    <th>Quantity</th>
-                                 
+                                    <th>Quantity</th> 
                                     <th>Gift</th>
+                                    <th>Note</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
