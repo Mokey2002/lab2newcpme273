@@ -26,6 +26,7 @@ var authors = [
     { name: 'Terry Pratchett', age: 66, id: '3' }
 ];
 
+
 const BookType = new GraphQLObjectType({
     name: 'Book',
     fields: () => ({
@@ -43,6 +44,91 @@ const BookType = new GraphQLObjectType({
 
 const AuthorType = new GraphQLObjectType({
     name: 'Author',
+    fields: () => ({
+        id: { type: GraphQLID },
+        name: { type: GraphQLString },
+        age: { type: GraphQLInt },
+        books: {
+            type: new GraphQLList(BookType),
+            resolve(parent, args) {
+                return books.filter(book => book.authorId === parent.id);
+            }
+        }
+    })
+});
+
+const UserType = new GraphQLObjectType({
+    name: 'User',
+    fields: () => ({
+        id: { type: GraphQLID },
+        name: { type: GraphQLString },
+        age: { type: GraphQLInt },
+        books: {
+            type: new GraphQLList(BookType),
+            resolve(parent, args) {
+                return books.filter(book => book.authorId === parent.id);
+            }
+        }
+    })
+});
+const ItemType = new GraphQLObjectType({
+    name: 'Item',
+    fields: () => ({
+        id: { type: GraphQLID },
+        name: { type: GraphQLString },
+        age: { type: GraphQLInt },
+        books: {
+            type: new GraphQLList(BookType),
+            resolve(parent, args) {
+                return books.filter(book => book.authorId === parent.id);
+            }
+        }
+    })
+});
+const StoreType = new GraphQLObjectType({
+    name: 'Store',
+    fields: () => ({
+        id: { type: GraphQLID },
+        name: { type: GraphQLString },
+        age: { type: GraphQLInt },
+        books: {
+            type: new GraphQLList(BookType),
+            resolve(parent, args) {
+                return books.filter(book => book.authorId === parent.id);
+            }
+        }
+    })
+});
+const PurchasesType = new GraphQLObjectType({
+    name: 'Purchases',
+    fields: () => ({
+        id: { type: GraphQLID },
+        name: { type: GraphQLString },
+        age: { type: GraphQLInt },
+        books: {
+            type: new GraphQLList(BookType),
+            resolve(parent, args) {
+                return books.filter(book => book.authorId === parent.id);
+            }
+        }
+    })
+});
+const CartType = new GraphQLObjectType({
+    name: 'Cart',
+    fields: () => ({
+        id: { type: GraphQLID },
+        name: { type: GraphQLString },
+        age: { type: GraphQLInt },
+        books: {
+            type: new GraphQLList(BookType),
+            resolve(parent, args) {
+                return books.filter(book => book.authorId === parent.id);
+            }
+        }
+    })
+});
+const FavoritesType = new GraphQLObjectType({
+    name: 'Favorites',
     fields: () => ({
         id: { type: GraphQLID },
         name: { type: GraphQLString },
