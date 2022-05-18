@@ -1,4 +1,5 @@
 const graphql = require('graphql');
+const { addShop, addFavorites } = require('../../../frontend/src/mutation/mutations');
 
 const {
     GraphQLObjectType,
@@ -64,10 +65,7 @@ const UserType = new GraphQLObjectType({
         name: { type: GraphQLString },
         age: { type: GraphQLInt },
         books: {
-            type: new GraphQLList(BookType),
-            resolve(parent, args) {
-                return books.filter(book => book.authorId === parent.id);
-            }
+
         }
     })
 });
@@ -80,6 +78,11 @@ const ItemType = new GraphQLObjectType({
         books: {
             type: new GraphQLList(BookType),
             resolve(parent, args) {
+
+
+
+
+
                 return books.filter(book => book.authorId === parent.id);
             }
         }
@@ -178,7 +181,7 @@ const RootQuery = new GraphQLObjectType({
 const Mutation = new GraphQLObjectType({
     name: 'Mutation',
     fields: {
-        addAuthor: {
+        addItem: {
             type: AuthorType,
             args: {
                 name: { type: GraphQLString },
@@ -197,7 +200,62 @@ const Mutation = new GraphQLObjectType({
             }
         },
 
-        addBook: {
+        addUser: {
+            type: BookType,
+            args: {
+                name: { type: GraphQLString },
+                genre: { type: GraphQLString },
+                authorId: { type: GraphQLID },
+            },
+            resolve(parent, args) {
+                let book = {
+                    name: args.name,
+                    genre: args.genre,
+                    authorId: args.authorId,
+                    id: books.length+1
+                }
+                books.push(book);
+                return book;
+            }
+        }
+
+        addShop: {
+            type: BookType,
+            args: {
+                name: { type: GraphQLString },
+                genre: { type: GraphQLString },
+                authorId: { type: GraphQLID },
+            },
+            resolve(parent, args) {
+                let book = {
+                    name: args.name,
+                    genre: args.genre,
+                    authorId: args.authorId,
+                    id: books.length+1
+                }
+                books.push(book);
+                return book;
+            }
+        }
+        addFavorites: {
+            type: BookType,
+            args: {
+                name: { type: GraphQLString },
+                genre: { type: GraphQLString },
+                authorId: { type: GraphQLID },
+            },
+            resolve(parent, args) {
+                let book = {
+                    name: args.name,
+                    genre: args.genre,
+                    authorId: args.authorId,
+                    id: books.length+1
+                }
+                books.push(book);
+                return book;
+            }
+        }
+        addCart: {
             type: BookType,
             args: {
                 name: { type: GraphQLString },
