@@ -5,6 +5,9 @@ const getUser = gql`
         users {
             username
             password
+            city
+            age
+            country
             jwt
             id
         }

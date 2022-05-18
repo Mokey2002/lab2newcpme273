@@ -1,52 +1,59 @@
 
 import { gql } from 'apollo-boost';
 
-const addBookMutation = gql`
-    mutation ($name: String, $genre: String, $authorId: ID){
-        addBook(name: $name, genre: $genre, authorId: $authorId){
-            name
-            id
-        }
-    }
-`;
+
 const addUser = gql`
-    mutation ($name: String, $genre: String, $authorId: ID){
-        addBook(name: $name, genre: $genre, authorId: $authorId){
-            name
-            id
+    mutation ($username: String, $passoword: String, $age: String, $city: String, $zip:String){
+        addUser(username: $username, password: $password, age: $age,city:$city,zip:$zip){
+            username
+            password
+            city
+            age
+            zip
+
         }
     }
 `;
 const addItem = gql`
-    mutation ($name: String, $genre: String, $authorId: ID){
-        addBook(name: $name, genre: $genre, authorId: $authorId){
-            name
-            id
+    mutation ($itemname: String, $quantity: String, $description: String,$price: String){
+        addItem(name: $itemname, quantity: $quantity, description: $description, price:$price){
+            itemname
+            quantity
+            description
+            price
+
         }
     }
 `;
 const addShop = gql`
-    mutation ($name: String, $genre: String, $authorId: ID){
-        addBook(name: $name, genre: $genre, authorId: $authorId){
-            name
-            id
+    mutation ($username: String, $shopname: String){
+        addShop(username: $username, shopname: $shopname){
+            username
+            shopname
+            
         }
     }
 `;
 const addFavorites = gql`
-    mutation ($name: String, $genre: String, $authorId: ID){
-        addBook(name: $name, genre: $genre, authorId: $authorId){
-            name
-            id
+    mutation  ($itemname: String, $quantity: String, $description: String,$price: String){
+        addFavorites (itemname: $itemname, quantity: $quantity, description: $description,price: $price){
+            itemname
+            quantity
+            description
+            price
+            
         }
     }
 `;
 const addCart = gql`
-    mutation ($name: String, $genre: String, $authorId: ID){
-        addBook(name: $name, genre: $genre, authorId: $authorId){
-            name
-            id
+    mutation ($itemname: String, $quantity: String, $description: String,$price: String){
+        addCart(itemname: $itemname, quantity: $quantity, description: $description,price: $price){
+            itemname
+            quantity
+            description
+            price
+            
         }
     }
 `;
-export {addBookMutation};
+export {addUser,addFavorites,addCart,addItem,addShop};
