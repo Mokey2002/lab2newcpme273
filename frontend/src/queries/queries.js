@@ -64,54 +64,7 @@ const getCart = gql`
     }
 `;
 
-const addCart = gql`
-    {
-        cart {
-            itemname
-            quantity
-            jwt
-            id
-        }
-    }
-`;
-const addFavorites = gql`
-    {
-        favorites {
-            itemname
-            jwt
-            id
-        }
-    }
-`;
-const addItem = gql`
-    {
-        item {
-            itemname
-            quantity
-            jwt
-            id
-        }
-    }
-`;
-const addShop = gql`
-    {
-        shop {
-            shopname
-            username
-            jwt
-            id
-        }
-    }
-`;
-const addUser = gql`
-    {
-        user {
-            name
-            password
-            id
-        }
-    }
-`;
 
 
-export {  getAllItems,getCart,addUser,getFavorites,getItems,getShop,getUser,addCart,addFavorites,addItem,addShop,addCart};
+
+export {  getAllItems,getCart,getFavorites,getItems,getShop,getUser}
