@@ -1,5 +1,31 @@
 const graphql = require('graphql');
 const { addShop, addFavorites } = require('../../../frontend/src/mutation/mutations');
+const config = require("../config/auth.config");
+const db = require("../models");
+const multer = require("multer");
+const storage = multer.diskStorage({
+  destination:(req,file,cb) =>{
+      cb(null,".");
+  },
+  filename: function(req,file,cb){
+    console.log(file)
+      const ext = file.mimetype.split("/")[1];
+      cb(null, file.originalname);
+
+  }
+});
+// uploads
+const upload = multer({
+  storage:storage
+})
+const User = db.user;
+const Role = db.role;
+const Shop = db.shop;
+const ShopItem = db.shopItems;
+const Cart = db.cart;
+const Favorite = db.favorites;
+const ShopHistory = db.shopHistory;
+
 
 const {
     GraphQLObjectType,
@@ -11,21 +37,7 @@ const {
     GraphQLNonNull
 } = graphql;
 
-// dummy data
-var books = [
-    { name: 'Name of the Wind', genre: 'Fantasy', id: '1', authorId: '1' },
-    { name: 'The Final Empire', genre: 'Fantasy', id: '2', authorId: '2' },
-    { name: 'The Hero of Ages', genre: 'Fantasy', id: '4', authorId: '2' },
-    { name: 'The Long Earth', genre: 'Sci-Fi', id: '3', authorId: '3' },
-    { name: 'The Colour of Magic', genre: 'Fantasy', id: '5', authorId: '3' },
-    { name: 'The Light Fantastic', genre: 'Fantasy', id: '6', authorId: '3' },
-];
 
-var authors = [
-    { name: 'Patrick Rothfuss', age: 44, id: '1' },
-    { name: 'Brandon Sanderson', age: 42, id: '2' },
-    { name: 'Terry Pratchett', age: 66, id: '3' }
-];
 
 
 const BookType = new GraphQLObjectType({
@@ -63,10 +75,9 @@ const UserType = new GraphQLObjectType({
     fields: () => ({
         id: { type: GraphQLID },
         name: { type: GraphQLString },
-        age: { type: GraphQLInt },
-        books: {
-
-        }
+        passwrod:{ type: GraphQLString },
+        city:{ type: GraphQLString },
+        age: { type: GraphQLInt }
     })
 });
 const ItemType = new GraphQLObjectType({
@@ -74,18 +85,10 @@ const ItemType = new GraphQLObjectType({
     fields: () => ({
         id: { type: GraphQLID },
         name: { type: GraphQLString },
-        age: { type: GraphQLInt },
-        books: {
-            type: new GraphQLList(BookType),
-            resolve(parent, args) {
-
-
-
-
-
-                return books.filter(book => book.authorId === parent.id);
-            }
-        }
+        price: { type: GraphQLString },
+        description: { type: GraphQLString },
+        quantity:{ type: GraphQLString },
+        category:{ type: GraphQLString }
     })
 });
 const StoreType = new GraphQLObjectType({
@@ -93,13 +96,8 @@ const StoreType = new GraphQLObjectType({
     fields: () => ({
         id: { type: GraphQLID },
         name: { type: GraphQLString },
-        age: { type: GraphQLInt },
-        books: {
-            type: new GraphQLList(BookType),
-            resolve(parent, args) {
-                return books.filter(book => book.authorId === parent.id);
-            }
-        }
+        username: { type: GraphQLInt }
+    
     })
 });
 const PurchasesType = new GraphQLObjectType({
@@ -130,20 +128,7 @@ const CartType = new GraphQLObjectType({
         }
     })
 });
-const FavoritesType = new GraphQLObjectType({
-    name: 'Favorites',
-    fields: () => ({
-        id: { type: GraphQLID },
-        name: { type: GraphQLString },
-        age: { type: GraphQLInt },
-        books: {
-            type: new GraphQLList(BookType),
-            resolve(parent, args) {
-                return books.filter(book => book.authorId === parent.id);
-            }
-        }
-    })
-});
+
 
 const RootQuery = new GraphQLObjectType({
     name: 'RootQueryType',
@@ -182,95 +167,234 @@ const Mutation = new GraphQLObjectType({
     name: 'Mutation',
     fields: {
         addItem: {
-            type: AuthorType,
+            type: ItemType,
             args: {
+                id: { type: GraphQLID },
                 name: { type: GraphQLString },
-                age: { type: GraphQLInt },
-                id: { type: GraphQLID }
+                price: { type: GraphQLString },
+                description: { type: GraphQLString },
+                quantity:{ type: GraphQLString },
+                category:{ type: GraphQLString }
             },
-            resolve(parent, args) {
-                let author = {
-                    name: args.name,
-                    age: args.age,
-                    id: args.id
-                };
-                authors.push(author)
-                console.log("Authors", authors);
-                return author;
+            resolve(args, res) {
+               
+                    console.log("Add Item")
+                    upload.single("image")
+                    console.log(args)
+                    console.log(args)
+                    console.log("Additem")
+                    let username = args.username;
+                    let name = args.itemname;
+                    let category = args.category;
+                    let description =.body.description;
+                    let price = args.price;
+                    let quantity = args.quantity;
+                    let sname=args.shopname
+                  
+                    console.log("Adding shop")
+                    const shopitem = new ShopItem({
+                      username: username,
+                      shopname: sname,
+                      itemname: name,
+                      category: category,
+                      description : description,
+                      price  : price,
+                      quantity: quantity,
+                      photolocation:req.file.originalname
+                  
+                    });
+                    shopitem.save((err, shop) => {
+                      if (err) {
+                        res.status(500).send({ message: err });
+                        return;
+                      } 
+                    });
+                    return res.status(200).send({ message: "Shop Item Added." });
+                  
+                 
             }
         },
 
         addUser: {
-            type: BookType,
+            type: UserType,
             args: {
                 name: { type: GraphQLString },
                 genre: { type: GraphQLString },
                 authorId: { type: GraphQLID },
             },
             resolve(parent, args) {
-                let book = {
-                    name: args.name,
-                    genre: args.genre,
-                    authorId: args.authorId,
-                    id: books.length+1
-                }
-                books.push(book);
-                return book;
+                console.log("inside signup")
+                console.log(args)
+                console.log("inside signup")
+                const user = new User({
+                  username: args.body.username,
+                  email: args.body.email,
+                  password: bcrypt.hashSync(args.password, 8),
+                  city: args.body.city,
+                  age :  args.body.age,
+                  zip :  args.body.zip,
+                  street:  args.body.street
+              
+                });
+              
+                user.save((err, user) => {
+                  if (err) {
+                    res.status(500).send({ message: err });
+                    return;
+                  }
+              
+                  if (req.body.roles) {
+                    Role.find(
+                      {
+                        name: { $in: req.body.roles }
+                      },
+                      (err, roles) => {
+                        if (err) {
+                          res.status(500).send({ message: err });
+                          return;
+                        }
+              
+                        user.roles = roles.map(role => role._id);
+                        user.save(err => {
+                          if (err) {
+                            res.status(500).send({ message: err });
+                            return;
+                          }
+              
+                          res.send({ message: "User was registered successfully!" });
+                        });
+                      }
+                    );
+                  } else {
+                    Role.findOne({ name: "user" }, (err, role) => {
+                      if (err) {
+                        res.status(500).send({ message: err });
+                        return;
+                      }
+              
+                      user.roles = [role._id];
+                      user.save(err => {
+                        if (err) {
+                          res.status(500).send({ message: err });
+                          return;
+                        }
+              
+                        res.send({ message: "User was registered successfully!" });
+                      });
+                    });
+                  }
+                });
             }
-        }
+        },
 
         addShop: {
-            type: BookType,
+            type: StoreType,
             args: {
+                id: { type: GraphQLID },
                 name: { type: GraphQLString },
-                genre: { type: GraphQLString },
-                authorId: { type: GraphQLID },
+                username: {type: GraphQLString}
             },
             resolve(parent, args) {
-                let book = {
-                    name: args.name,
-                    genre: args.genre,
-                    authorId: args.authorId,
-                    id: books.length+1
-                }
-                books.push(book);
-                return book;
+                exports.signupShop = (args, res) => {
+                    ShopItem.findOne({
+                      shopname: args.shopname
+                    })
+                      .populate("roles", "-__v")
+                      .exec((err, user) => {
+                        console.log("shop  signup")
+                        console.log(user);
+                        console.log("shop  signup")
+                        if (err) {
+                          res.status(500).send({ message: err });
+                          return;
+                        }
+                  
+                        if (!user) {
+                          console.log("Adding shop")
+                          const shop = new ShopItem({
+                            username: args.username,
+                            shopname: args.shopname
+                        
+                          });
+                          shop.save((err, shop) => {
+                            if (err) {
+                              res.status(500).send({ message: err });
+                              return;
+                            } 
+                          });
+                          return res.status(200).send({ message: "Shop Created." });
+                        }
+                        res.status(500).send({message :"Shopname already taken"});
+                      });
+                  };
             }
-        }
+        },
+
         addFavorites: {
-            type: BookType,
+            type: ItemType,
             args: {
+                id: { type: GraphQLID },
                 name: { type: GraphQLString },
-                genre: { type: GraphQLString },
-                authorId: { type: GraphQLID },
+                username: {type: GraphQLString}
             },
             resolve(parent, args) {
-                let book = {
-                    name: args.name,
-                    genre: args.genre,
-                    authorId: args.authorId,
-                    id: books.length+1
-                }
-                books.push(book);
-                return book;
+            
+                    console.log("Add favorite")
+                    console.log("Favorite")
+                 
+                    console.log("add favorite")
+                    let username = args.username;
+                    let name = args.itemname;
+                   
+                    //let quantity = req.body.quantity;
+                  
+                  
+                    console.log("Adding favorite")
+                    const FavoriteItem = new Favorite({
+                      username:username,
+                      itemname: name
+                  
+                    });
+                    FavoriteItem.save((err, shop) => {
+                      if (err) {
+                       
+                        console.log(err)
+                        res.status(500).send({ message: err });
+                        return;
+                      }
+                    });
+                    console.log("Favorite")
+                    return res.status(200).send({ message: "favorite Item Added." });
+                  
+                 
             }
-        }
+        },
+
         addCart: {
-            type: BookType,
+            type: ItemType,
             args: {
+                id: { type: GraphQLID },
                 name: { type: GraphQLString },
-                genre: { type: GraphQLString },
-                authorId: { type: GraphQLID },
+                price: { type: GraphQLString },
+                description: { type: GraphQLString },
+                quantity:{ type: GraphQLString },
+                category:{ type: GraphQLString },
+                username: {type: GraphQLString}
             },
             resolve(parent, args) {
-                let book = {
-                    name: args.name,
-                    genre: args.genre,
-                    authorId: args.authorId,
-                    id: books.length+1
-                }
-                books.push(book);
-                return book;
+                const cartItem = new Cart({
+                    username:args.username,
+                    itemname:args.name
+                   // price: price
+                
+                  });
+                  cartItem.save((err, shop) => {
+                    if (err) {
+                      res.status(500).send({ message: err });
+                      return;
+                    }
+                  });
+                  return res.status(200).send({ message: "Cart Item Added." });
             }
         }
 
